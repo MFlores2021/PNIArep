@@ -1,0 +1,31 @@
+version: '2'
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=<d4+484s3>
+      - MYSQL_USER=pniauser
+      - MYSQL_PASSWORD=pniapass123
+      - MYSQL_DATABASE=dbpnia
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+    restart: always
+    ports:
+      - 8082:80
+    volumes:
+      - /sessions
+    depends_on:
+      - db

@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+{% include "flist_js.html" %}
+{% endblock javascript %}
+
+{% block mainbody %}
+
+<div class="row">
+	<div class="col-lg-12">
+	<h4 class="page-header"><b>Field ({{ fid }}) information</b></h4>
+	
+	{% if ERRMSG %}
+		<div class="alert alert-dismissable alert-danger">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+			<h4>
+			Alert!
+			</h4> <strong>Warning!</strong> {{ ERRMSG }}.
+		</div>
+	{% endif %}
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-6">
+		
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover">
+		        <tr><td>Field ID:</td> <td>{{ fid }}</td></tr>
+		        <tr><td>Departament:</td>        <td>{{ departament }}</td></tr>
+		        <tr><td>Province:</td>        <td>{{ province }}</td></tr>
+		        <tr><td>District:</td>      <td>{{ district }}</td></tr>
+	            <tr><td>Locality:</td>      <td>{{ locality }}</td></tr>
+	            <tr><td>Latitude:</td>  <td><span id=lat>{{ lat }}</span>&#176;</td></tr>
+	            <tr><td>Longitude:</td> <td><span id=lng>{{ lng }}</span>&deg;</td></tr>
+	            <tr><td>Altitude:</td>  <td>{{ alt }} m</td></tr>
+			</table>
+		</div>
+	</div>
+
+	<div class="col-lg-6">
+		<div class="tabbable" id="tabs-888938">
+			<ul class="nav nav-tabs">		
+				<li class="active">
+					<a href="#fieldMap" data-toggle="tab" id="fieldMapLink">Field Map</a>
+				</li>
+				<li>
+					<a href="#fieldImage" data-toggle="tab">Field Image</a>
+				</li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane " id="fieldImage">
+				{% if img|length > 0 %}
+					{% for subimg in img %}
+						{% if subimg %}
+						<a href=# data-featherlight="{% static "images" %}/{{ prefix }}/{{ subimg }}"><img class="img-responsive img-rounded" src="{% static "images" %}/{{ prefix }}/{{ subimg }}"></a><br />
+						{% else %}
+						<div class="alert alert-dismissable alert-danger">
+            				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+							<strong>Image is not available.</strong>
+        				</div>
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<div class="alert alert-dismissable alert-danger">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+						<strong>Image is not available.</strong>
+					</div>
+				{% endif %}
+				</div>
+                <div class="tab-pane active" id="fieldMap" style="height:300px;"> 
+				</div>
+            </div>
+        </div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h4 class="page-header"><b>Samples in field {{ fid }}</b></h4>
+         <!--display sample list -->
+        <table class="table table-striped">
+        <tr>
+        <th><b>Sample</b></td>
+        <th><b>Field</b></td>
+        <th><b>Isolate source</b></td>
+        <th><b>Date (DD/MM/YYYY)</b></td>
+        <th><b>Host</b></td>
+        <th><b>Cultivar</b></td>
+		<th><b>Sequenced</b></td>
+        </tr>
+        {% for s in sample %}
+        <tr>
+        {% for e in s %}
+          {% if forloop.counter0 == 0 %}
+			{% if s.7 == 1 %}
+          		<td>
+					<a href="sinfo?sid={{ e }}" target=_blank>{{ e }}</a>
+					<tr><td>Departament:</td>        <td>{{ departament }}</td></tr>
+					{% if e in select %} 
+						(<span class="glyphicon glyphicon-certificate"></span>)
+					{% endif %}
+				</td>
+			{% else %}
+				<td>{{ e }}</td>
+			{% endif %}
+
+
+          {% elif forloop.counter0 == 3 or forloop.counter0 == 4 %}
+          	<td>
+            	{% for subpimg in e %}
+                	<a href=# data-featherlight="{% static "images" %}/{{ prefix }}/{{ subpimg }}">{{ subpimg }}</a> 
+            	{% endfor %}
+          	</td>
+
+		  {% elif forloop.counter0 == 7 %}
+			{% if s.7 == 1 %}
+				<td>Yes</td>
+			{% else %}
+				<td>No</td>
+			{% endif %}
+
+          {% else %}
+            <td>{{ e }}</td>
+          {% endif%}
+
+        {% endfor %}
+        </tr>
+        {% endfor %}
+        </table>
+		{% if vname %}	
+			<h5><span class="glyphicon glyphicon-certificate"></span> selected samples contain <b>{{ vname }}</b> </h5>
+		{% endif %}
+		<br />
+	</div>
+</div>
+
+
+{% endblock mainbody %}
+

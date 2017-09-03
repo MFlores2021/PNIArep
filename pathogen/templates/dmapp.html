@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+{% include "dmapp_js.html" %}
+{% endblock javascript %}
+
+{% block mainbody %}
+<div class="row">
+	<div class="col-md-8 col-md-offset-2" >
+		<div class="tabbable" id="tabs-888938">
+			<ul class="nav nav-tabs">
+				<li class="active">
+					<a id="fieldMapLink" href="#fieldMap" data-toggle="tab">Field Map</a>
+				</li>
+				<li>
+					<a id="virusMapLink" href="#virusMap" data-toggle="tab"> Map</a>
+				</li>
+				<li>
+					<form class="navbar-form navbar-right">
+                        <div class="form-group form-inline" id="vmapform">
+                        </div>
+            		</form>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="fieldMap" style="height:550px;"></div>
+				<div class="tab-pane" id="virusMap" style="height:550px;"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock mainbody %}
+

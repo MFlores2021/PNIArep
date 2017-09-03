@@ -1,0 +1,112 @@
+<script>
+var geoList = [];
+var m = 0;			// page start member
+var n = 4;			// page end member
+var num = 10;		// number of record in each page
+var country = { GU:'Guinea', BE:'Benin', NI:'Nigeria', AO:'Angola', MW:'Malawi', ZM:'Zambia', ZW:'Zimbabwe', TZ:'Tanzania', UG:'Uganda', ET:'Ethiopia', MO:'Mozambique', GH:'Ghana', BF:'Burkina Faso'};
+
+function load_data() {
+	$.ajax({
+		//url: '{{ dbURL }}',
+		url: '/{{ SUB_FDR }}/list_samplefield/',
+		async: false,
+		dataType: 'json',
+		success: function (data) {
+			geoList = data;
+		} 
+	});
+}
+
+function filter_data() {
+    var geoListF = {};
+    for(var fid in geoList) {
+        var sampleList = geoList[fid]['samp'];
+        var sampleListF = [];
+        for(var i = 0; i < sampleList.length; i++) {
+            var sequenced = sampleList[i][7];
+            if (sequenced == 1) {
+                sampleListF.push(sampleList[i]);
+            }
+        }
+
+        if (sampleListF.length > 0) {
+            geoListF[fid] = {};
+            geoListF[fid]['attr'] = geoList[fid]['attr'];
+            geoListF[fid]['samp'] = sampleListF;
+        }
+    }
+    geoList = geoListF;
+}
+
+/* select sample according to country id */
+function sample_selection(geoList, cid) {
+	var table_array = [];
+	for (var name in geoList) {
+		var id = name.substr(0,2);
+		if (cid == id || cid == 'ALL') {
+			var cname = 'NA';
+			if (id in country) { cname = country[id]; }
+			var sampleList = geoList[name]['samp'];	
+			for(var i = 0; i < sampleList.length; i++) {
+				var table_html = '';
+				table_html += "<tr><td>" + cname + "</td>\n";
+				table_html += "<td><a href=flist?fid=" + name + " target=_blank>" + name + "</a></td>\n";
+				table_html += "<td><a href=\"sinfo?sid=" + sampleList[i][0] + "\" target=_blank>"+ sampleList[i][0] + "</a></td>\n";
+				table_html += "<td><a href=\"ftp://bioinfo.bti.cornell.edu/pub/virome/sweetpotato/" + sampleList[i][0] + ".gz\" target=\"_blank\" download>Download</a></td></tr>\n";
+				table_array.push(table_html);
+			}
+		}
+	}
+	table_array.sort();
+	return table_array;
+}
+/* pre pagination data */
+function pre_pagination(data) {
+	var newdata = '';
+	for(var i in data) { newdata += data[i]; }
+    return newdata;
+}
+
+$(function(){
+	/* load all field/sample data with json format */
+	load_data();
+	filter_data();
+	
+	/* generate selection form for country */
+	var sel = {};		// store key and country name
+	var sel_sort = [];  // for sorting country
+	for (var name in geoList) {
+		var id = name.substr(0,2);
+		if (!(id in sel)) {
+			if (id in country) {
+				sel[id] = country[id]
+				sel_sort.push(id);
+			}
+		}
+	}
+	sel_sort.sort();
+
+	var sel_html = "<option selected value=ALL>All</option>\n";
+	for (i=0; i<sel_sort.length; i++) {
+		var k = sel_sort[i];
+		sel_html += "<option value="+ k + ">" + sel[k] + "</option>\n";
+	}
+	$( "#sCountry" ).append(sel_html);
+
+	/* display sample list */
+	var scountry_id = 'ALL';    // set all for default
+	var scountry_name = 'All';  // set all for default
+	var sampleTable = sample_selection(geoList, scountry_id);
+	var sampleTablePage = pre_pagination(sampleTable);
+	$('#sampleTable tbody').html(sampleTablePage);
+
+	$('#sCountry').on('change', function() {
+        scountry_id = $( "#sCountry" ).val();
+        scountry_name = $( "#sCountry option:selected" ).text();
+        sampleTable = sample_selection(geoList, scountry_id);
+		sampleTablePage = pre_pagination(sampleTable);
+        $('#sampleTable tbody').html(sampleTablePage);
+    });
+});
+
+</script>

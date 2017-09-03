@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block mainbody %}
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<h3 align=center>Related Publication</h3>
+		<div style="padding: 20px; height: 500px;">
+		<ul>
+		<li>Liliam Gutarra, Juan Herrera, Elizabeth Fernandez, Jan F. Kreuze, Hannele Lindqvist-
+Kreuze (2017) <a href=http://www.ncbi.nlm.nih.gov/pubmed/ target=_blank>
+Current occurrence, diversity and pathogenicity of bacterial wilt bacterium Ralstonia solanacearum in Peru. 
+</a> Frontiers</li><br>
+		</ul>
+		</div>
+	</div>
+</div>
+
+<br />
+<br />
+<div class="embed-responsive embed-responsive-16by9">
+  <iframe class="embed-responsive-item" src="{% static 'vendor/Laboratory2015.pdf' %}"></iframe>
+</div>
+
+{% endblock %}

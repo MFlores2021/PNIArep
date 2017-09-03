@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block mainbody %}
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<h3 align=center>Project Participants</h3>
+	</div>
+	<div class="col-md-6 col-md-offset-3">
+		<h4><b><font color=brown>PIs</font></b></h4>
+	</div>
+</div>
+
+<br/>
+
+<div class="row">
+    <div class="col-md-3 col-md-offset-3">
+		<address>
+			<img src="{% static "img/Fei.png" %}"><br>
+			<strong>Hannele Lindqvist Kreuze (PI)</strong><br>
+			International Potato Center (CIP)<br>
+			Lima, Peru
+  			<a href=https://cipotato.org target=_blank>Website</a>
+		</address>
+    </div>
+	<div class="col-md-3">
+		<address>
+			<img src="{% static "img/Kreuze.png" %}"><br>
+			<strong>Soledad Gamboa</strong> <br>
+			International Potato Center (CIP)<br>
+			Lima, Peru
+		</address>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h4><b><font color=brown>Collaborators</font></b></h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3 col-md-offset-3">
+		<b>Collaborator</b><br>International Potato Center (CIP)<br>
+Ethiopia<br>
+    </div>
+    <div class="col-md-3">
+    </div>
+</div>
+<br>
+{% endblock mainbody %}

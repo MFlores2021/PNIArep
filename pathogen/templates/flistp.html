@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+{% include "flistp_js.html" %}
+{% endblock javascript %}
+
+{% block css %}
+
+   <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="{% static 'vendor/datatables-responsive/dataTables.responsive.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block mainbody %}
+
+<div class="row">
+	<div class="col-lg-12">
+	<h4 class="page-header"><b>Field ({{ prefix }}) information</b></h4>
+	
+	{% if ERRMSG %}
+		<div class="alert alert-dismissable alert-danger">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+			<h4>
+			Alert!
+			</h4> <strong>Warning!</strong> {{ ERRMSG }}.
+		</div>
+	{% endif %}
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-6">
+		
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover">
+		        <tr><td>Field ID:</td> <td>{{ prefix }}</td></tr>
+		        <tr><td>Departament:</td>        <td>{{ region }}</td></tr>
+		        <tr><td>Province:</td>      <td>{{ province }}</td></tr>
+		        <tr><td>District:</td>      <td>{{ district }}</td></tr>
+	            <tr><td>Locality:</td>      <td>{{ locality }}</td></tr>
+	            <tr><td>Latitude:</td>  <td><span id=lat>{{ lat }}</span>&#176;</td></tr>
+	            <tr><td>Longitude:</td> <td><span id=lng>{{ lng }}</span>&deg;</td></tr>
+	            <tr><td>Altitude:</td>  <td>{{ alt }} m</td></tr>
+	            <tr><td>Reference:</td>    <td>{{ reference }} </td></tr>
+			</table>
+		</div>
+	</div>
+
+	<div class="col-lg-6">
+		<div class="tabbable" id="tabs-888938">
+			<ul class="nav nav-tabs">
+				<li class="active">
+					<a href="#fieldMap" data-toggle="tab" id="fieldMapLink">Field Map</a>
+				</li>
+				<li >
+					<a href="#fieldImage" data-toggle="tab">Field Image</a>
+				</li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane " id="fieldImage">
+				{% if img|length > 0 %}
+					{% for subimg in img %}
+						{% if subimg %}
+						<a href=# data-featherlight="{% static "images" %}/{{ prefix }}/{{ subimg }}"><img class="img-responsive img-rounded" src="{% static "images" %}/{{ prefix }}/{{ subimg }}"></a><br />
+						{% else %}
+						<div class="alert alert-dismissable alert-danger">
+            				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+							<strong>Image is not available.</strong>
+        				</div>
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<div class="alert alert-dismissable alert-danger">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+						<strong>Image is not available.</strong>
+					</div>
+				{% endif %}
+				</div>
+                <div class="tab-pane active" id="fieldMap" style="height:300px;"> 
+				</div>
+            </div>
+        </div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h4 class="page-header"><b>Samples in field {{ prefix }}</b></h4>
+         <!--display sample list -->
+		<div class="panel-body">
+        <table width="100%" id="flistptable" class="table table-striped table-bordered table-hover">
+        <thead><tr>
+		<th><b>Sample</b></th>
+		<td><b>Pathogen Host</b></td>
+		<td><b>Variety</b></td>
+		<td><b>Race <font color="white">aaaaaaaaa</font></td></b>
+		<td><b>Rack</td></b>
+		<td><b>Box</td></b>
+		<td><b>Grid</td></b>
+		<td><b>No. Vials</td></b>
+		<td><b>Colector (source)</td></b>
+		<td><b>Date of collection</td></b>
+		<td><b>Date intro N2</td></b>
+        </tr></thead>
+        {% for s in sample %}
+        <tbody><tr>
+        {% for e in s %}
+          {% if forloop.counter0 == 0 %}
+      		<td>
+				<a href="sinfo?sid={{ e }}" target=_blank>{{ e }}</a>
+				{% if e in select %} 
+					(<span class="glyphicon glyphicon-certificate"></span>)
+				{% endif %}
+			</td>
+
+          {% elif forloop.counter0 == 11 or forloop.counter0 == 12 or forloop.counter0 == 13 %}          	 
+
+          {% else %}
+            <td>{{ e }}</td>
+          {% endif%}
+
+        {% endfor %}
+        </tr></tbody>
+        {% endfor %}
+        </table></div>
+		{% if vname %}	
+			<h5><span class="glyphicon glyphicon-certificate"></span> selected samples contain <b>{{ vname }}</b> </h5>
+		{% endif %}
+		<br />
+	</div>
+</div>
+
+
+{% endblock mainbody %}
+
+{% block bodyend %}
+    <!-- jQuery -->
+
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{% static 'vendor/metisMenu/metisMenu.min.js' %}"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="{% static 'vendor/datatables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables-plugins/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables-responsive/dataTables.responsive.js' %}"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static 'dist/js/sb-admin-2.js' %}"></script>
+
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+  	$(document).ready(function() {
+    	$('#flistptable').DataTable({
+    		scrollX: true
+		} ); 
+	} );
+    </script>
+{% endblock bodyend %}

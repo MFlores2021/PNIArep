@@ -1,0 +1,38 @@
+<script src="//cdn.rawgit.com/noelboss/featherlight/1.3.3/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB-KZriOAGUmLwlGtgU9h-Xc1xMqwH11p4"></script>
+<!--<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAs8XAvF2CLHMosa7W2126k2qDfEonb6OQ&sensor=false"></script>-->
+<script>
+	
+function setMarkers(map, lat, lng){
+	var latlngset = new google.maps.LatLng(lat, lng);
+ 	var marker = new google.maps.Marker({  
+		map: map, 
+		title: name, 
+		position: latlngset
+	});
+	marker.setMap(map);
+	return marker;
+}
+
+$(function() {
+	var lng = $( "#lng" ).text();
+	var lat = $( "#lat" ).text();
+	var mapOptions = {
+		center: new google.maps.LatLng(lat, lng),
+		zoom: 5,
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+
+	var map;
+	var marker = setMarkers(map, lat, lng);
+
+	//$('#fieldMapLink').on('shown.bs.tab', function(e) {
+		if( map == undefined) {
+			map = new google.maps.Map(document.getElementById("fieldMap"), mapOptions);
+			marker.setMap(map);
+		}
+
+		console.log(mapOptions);
+	//});
+})
+</script>

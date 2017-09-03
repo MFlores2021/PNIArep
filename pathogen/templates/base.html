@@ -1,0 +1,167 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<style>
+.banner {
+  position: center;
+    text-align: center;
+    height: 200x;
+      background-color: purple;
+  background-position: center;
+    width: 100%;
+
+}
+</style>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Pathogen</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="{% static 'vendor/metisMenu/metisMenu.min.css' %}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static 'dist/css/sb-admin-2.css' %}" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="{% static 'vendor/morrisjs/morris.css' %}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+
+    {% block css %}
+    {% endblock css %}
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    {% block javascript %}
+    {% endblock javascript %}
+
+<header class="banner">
+    <img src="/static/images/potato-banner.png" width="100%" left="50%">
+</header>
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        {% block menu %}
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">PNIA website</a>
+            </div>
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+
+                      <li>
+                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Home</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-files-o fa-fw"></i> About us<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="participant.html">Participants</a>
+                                </li>
+                                <li>
+                                    <a href="publication.html">Publications</a>
+                                </li>
+                                
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-files-o fa-fw"></i> Ralstonia<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="dmapr.html">Map</a>
+                                </li>
+                                <li>
+                                    <a href="dtabler.html">Data</a>
+                                </li>
+                                <li>
+                                    <a href="downloadr.html">Download</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                         <li>
+                            <a href="#"><i class="fa fa-files-o fa-fw"></i> Phytoptora I.<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="pabout.html">About <i>P. Infestants</i></a>
+                                </li>
+                                <li>
+                                    <a href="dmapp.html">Map</a>
+                                </li>
+                                <li>
+                                    <a href="dtablep.html">Data</a>
+                                </li>
+                                <li>
+                                    <a href="downloadp.html">Download</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                       <li>
+                                    <a href="contact.html"><i class="fa fa-files-o fa-fw"></i> Contact Us</a>
+                        </li>
+            </div>
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+        {% endblock menu %}
+
+        <!-- /#page-wrapper -->
+        <div id="page-wrapper">
+        {% block mainbody %}
+        {% endblock mainbody %}
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    {% block bodyend %}
+
+        <!-- Metis Menu Plugin JavaScript -->
+        <script src="{% static 'vendor/metisMenu/metisMenu.min.js' %}"></script>
+
+        <!-- Morris Charts JavaScript -->
+        <script src="{% static 'vendor/raphael/raphael.min.js' %}"></script>
+        <script src="{% static 'vendor/morrisjs/morris.min.js' %}"></script>
+        <script src="{% static 'data/morris-data.js' %}"></script>
+
+        <!-- Custom Theme JavaScript -->
+        <script src="{% static 'dist/js/sb-admin-2.js' %}"></script>
+
+    {% endblock %}
+</body>
+
+</html>
