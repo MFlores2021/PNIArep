@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^participant',listViews.participant),
     url(r'^publication',listViews.publication),
     url(r'^pabout',listViews.pabout),
+    url(r'^rabout',listViews.rabout),
     url(r'^contact',listViews.contact),
     url(r'^downloadr',listViews.downloadr),
     url(r'^dtabler',listViews.dtabler),   

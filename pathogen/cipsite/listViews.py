@@ -21,6 +21,9 @@ def contact(request):
 def pabout(request):
     return render(request, "pabout.html")
 
+def rabout(request):
+    return render(request, "rabout.html")
+
 def downloadr(request):
     return render(request, "downloadr.html")
 
