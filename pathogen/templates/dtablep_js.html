@@ -74,7 +74,8 @@ function test_selection(virusList, selectName, selectCID) {
 
 			var table_html = '';
 			table_html += "<tr><td>" + "P. Infestans" + "</td>\n";
-			table_html += "<td><a href=psinfo?sid=" + sid + " target=_blank>" + sid + "</a></td>\n";
+			// table_html += "<td><a href=psinfo?sid=" + sid + " target=_blank>" + sid + "</a></td>\n";
+			table_html += "<td>" + sid + "</td>\n";
 			table_html += '<td>' + isolateid + '</td>\n';
 			table_html += "<td><a href=pflist?fid=" + fid + " target=_blank>" + field + "</a></td>\n";
 			table_html += '<td>' + fta + '</td>\n';
@@ -166,7 +167,8 @@ function sample_selection(geoList, cid) {
 		var table_html = '';
 
 		// if ( sampleList[i][7]) {
-			table_html += "<tr><td><a href=\"psinfo?sid=" + sampleList[i][0] + "\" target=_blank>"+ sampleList[i][0] + "</a></td>\n";
+			// table_html += "<tr><td><a href=\"psinfo?sid=" + sampleList[i][0] + "\" target=_blank>"+ sampleList[i][0] + "</a></td>\n";
+					table_html += "<tr><td>" + sampleList[i][0] + "</td>\n";
 		// } else {
 		// 	table_html += "<tr><td>" + sampleList[i][0] + "</td>\n";
 		// }
