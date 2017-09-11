@@ -219,7 +219,7 @@ def pload_data_samplefield():
 		sdate = m[41]
 
 		if len(sdate.split("/")) == 3 :
-			syear = m[21].split("/")[2]
+			syear = sdate.split("/")[2]
 		else:
 			syear = "Unknown"
 
