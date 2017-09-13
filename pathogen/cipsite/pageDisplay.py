@@ -35,7 +35,7 @@ def flist(request):
 	if fid:
 		if fid in data:
 			context['fid'] = fid
-			context['prefix'] = fid[0] + fid[1]
+			context['prefix'] = fid[:3]
 			context['departament'] = data[fid]['attr'][0]
 			context['province'] = data[fid]['attr'][1]
 			context['district'] = data[fid]['attr'][2]

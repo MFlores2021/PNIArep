@@ -141,32 +141,6 @@ def load_data_clean():
 
 	return dataCleanObj
 
-def load_data_virus():
-	dataVirusFile = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/data_virus.txt"
-	dataVirusObj = {}	# data virus obj for store all virus data
-	dh=open(dataVirusFile, 'r')
-	for line in dh:
-		if line[0] == "#":
-			continue
-		line = line.strip("\n")
-		m = line.split("\t")
-	
-		# 0	       1                 2       3           4           5		   6        7     89 
-		# sampleID type(known/novel) virusID virusFamily Description ShortDesc identity Field GPS
-		if len(m) != 10:
-			continue
-		vid = m[2]
-		if vid not in dataVirusObj.keys():
-			dataVirusObj[vid] = {}
-			dataVirusObj[vid]['type'] = m[1]
-			dataVirusObj[vid]['family'] = m[3]
-			dataVirusObj[vid]['desc'] = m[4]
-			dataVirusObj[vid]['short'] = m[5]
-			dataVirusObj[vid]['sample'] = []
-			dataVirusObj[vid]['sample'].append([m[0], m[6], m[7], m[8], m[9]])
-		else:
-			dataVirusObj[vid]['sample'].append([m[0], m[6], m[7], m[8], m[9]])
-	return dataVirusObj
 
 # load dataset Phytoptora
 def pload_data_samplefield():
@@ -203,10 +177,6 @@ def pload_data_samplefield():
 		prefix = sampleID[0:2]
 		fta = m[3]
 		nofta = m[4]
-		# simgs_exist = []
-		# slimgs_exist = []
-		# simgs = '' #m[0].split("/")
-		# slimgs = '' #m[0].split("/")
 		shost = m[5]  #host
 		svariety = m[6]  #variety
 		srace = m[19]
@@ -224,16 +194,6 @@ def pload_data_samplefield():
 			syear = "Unknown"
 
 		sobservation = m[28]
-
-		# for fname in simgs:
-		# 	fpath = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/images/" + prefix + "/" + fname
-		# 	if os.path.exists(fpath):
-		# 		simgs_exist.append(fname)
-
-		# for fname in slimgs:
-		# 	fpath = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/images/" + prefix + "/" + fname
-		# 	if os.path.exists(fpath):
-		# 		slimgs_exist.append(fname)
 
 		if sampleID in sample_uniq.keys():
 			sys.stderr.write('[ERR]dup sample ID ', sampleID, "\n")
@@ -254,15 +214,6 @@ def pload_data_samplefield():
 		lng = m[13]
 		alt = m[14]
 		fid = (m[7].replace(" ", "")+m[8].replace(" ", "")+m[9].replace(" ", "")+m[10].replace(" ", ""))  #m[3]
-		#lng = convert_GPS(m[9])
-		#lat = convert_GPS(m[8])
-		# fsize = ''
-		# fimgs_exist = []
-		# fimgs = '' # m[0].split("/")
-		# for fname in fimgs:
-		# 	fpath = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/images/" + prefix + "/" + fname
-		# 	if os.path.exists(fpath):
-		# 		fimgs_exist.append(fname)
 
 		#test
 		pesticides = m[15]
@@ -339,29 +290,14 @@ def load_data_samplefield():
 
 	for m in adh:
 
-		#print len(m)
-		print m[1]
 		# attribute for sample
 		sampleID = m[1]
 		prefix = sampleID[0:2]
 		isolate = m[7]
 		sdate = m[2]
-		# simgs_exist = []
-		# slimgs_exist = []
-		# simgs = m[0].split("/")
-		# slimgs = m[0].split("/")
 		scultivar = m[9]
 		shost = m[8]
-		#print m[6]
-		# for fname in simgs:
-		# 	fpath = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/images/" + prefix + "/" + fname
-		# 	if os.path.exists(fpath):
-		# 		simgs_exist.append(fname)
 
-		# for fname in slimgs:
-		# 	fpath = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/images/" + prefix + "/" + fname
-		# 	if os.path.exists(fpath):
-		# 		slimgs_exist.append(fname)
 
 		if sampleID in sample_uniq.keys():
 			sys.stderr.write('[ERR]dup sample ID ', sampleID, "\n")
@@ -407,8 +343,10 @@ def load_data_samplefield():
 			data_obj[fid]['test'].append([sampleID, fid, pcr_759_760, biovar, pcr_nmult, phylotype, sequevar, ncbi_acc])
 			data_obj[fid]['samp'].append([sampleID, fid, isolate, sdate, shost, scultivar, sequenced])
 		else:
+			data_obj[fid]['test'].append([sampleID, fid, pcr_759_760, biovar, pcr_nmult, phylotype, sequevar, ncbi_acc])
 			data_obj[fid]['samp'].append([sampleID, fid, isolate, sdate, shost, scultivar, sequenced])
 	
 	#db.close()
 
 	return data_obj
+	

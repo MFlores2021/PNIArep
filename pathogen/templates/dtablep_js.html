@@ -1,9 +1,3 @@
-<!--<script src="//cdn.rawgit.com/noelboss/featherlight/1.3.3/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="//code.jquery.com/jquery-1.12.4.js" type="text/javascript" charset="utf-8"></script>
-<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" type="text/javascript" charset="utf-8"></script>
-<style type="text/css" src="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"></style>
-<LINK rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
--->
 <script>
 var geoList = {};
 var geoListF = {};
@@ -11,7 +5,7 @@ var virusList = [];
 var m = 0;			// page start member
 var n = 4;			// page end member
 var num = 10;		// number of record in each page
-var country = { GU:'Guinea', BE:'Benin', NI:'Nigeria', AO:'Angola', MW:'Malawi', ZM:'Zambia', ZW:'Zimbabwe', TZ:'Tanzania', UG:'Uganda', ET:'Ethiopia', MO:'Mozambique', GH:'Ghana', BF:'Burkina Faso'};
+var country = { PE:'Peru'};
 
 function load_data() {
 	$.ajax({
@@ -52,7 +46,7 @@ function test_selection(virusList, selectName, selectCID) {
 	var table_array = [];
 	var virus_uniq = {};
 
-	for (var vid in geoList) {
+	for (var vid in geoList) { console.log(geoList[vid]['test']);
 		for (var i = 0; i< geoList[vid]['test'].length; i++) {
 			var sid = geoList[vid]['test'][i][0];
 			var isolateid = geoList[vid]['test'][i][1];
@@ -121,23 +115,27 @@ function field_selection(geoList, cid) {
 	var table_array = [];
 	for (var name in geoList) {
 		var id = name.substr(0,2);
-		if (cid == id || cid == 'ALL') {
-			var table_html = '';
-			var cname = 'Peru';
-			var lat = parseFloat(geoList[name]['attr'][5]);
-			var lng = parseFloat(geoList[name]['attr'][6]);
-			if (id in country) { cname = country[id]; }
-			table_html += "<tr><td>" + cname + "</td>\n";
-			table_html += "<td><a href=pflist?fid="+name+">" + name.substr(0,3); + "</a></td>\n";
-			table_html += "<td>" + geoList[name]['attr'][1] + "</td>\n";
-			table_html += "<td>" + geoList[name]['attr'][2] + "</td>\n";
-			table_html += "<td>" + geoList[name]['attr'][3] + "</td>\n";
-			table_html += "<td>" + geoList[name]['attr'][4] + "</td>\n";
-			table_html += "<td>" + lat.toFixed(5) + "</td>\n";
-			table_html += "<td>" + lng.toFixed(5) + "</td>\n";
-			table_html += "<td>" + geoList[name]['attr'][7] + "</td>\n";
-			table_html += "<td>" + geoList[name]['attr'][8] + "</td>\n</tr>\n";
-			table_array.push(table_html);
+		var ffid = name.substr(0,3);
+
+		if (ffid != "" ){ 
+			if (cid == id || cid == 'ALL') {
+				var table_html = '';
+				var cname = 'Peru';
+				var lat = parseFloat(geoList[name]['attr'][5]);
+				var lng = parseFloat(geoList[name]['attr'][6]);
+				if (id in country) { cname = country[id]; }
+				table_html += "<tr><td>" + cname + "</td>\n";
+				table_html += "<td><a href=pflist?fid="+name+">" + name.substr(0,3); + "</a></td>\n";
+				table_html += "<td>" + geoList[name]['attr'][1] + "</td>\n";
+				table_html += "<td>" + geoList[name]['attr'][2] + "</td>\n";
+				table_html += "<td>" + geoList[name]['attr'][3] + "</td>\n";
+				table_html += "<td>" + geoList[name]['attr'][4] + "</td>\n";
+				table_html += "<td>" + lat.toFixed(5) + "</td>\n";
+				table_html += "<td>" + lng.toFixed(5) + "</td>\n";
+				table_html += "<td>" + geoList[name]['attr'][7] + "</td>\n";
+				table_html += "<td>" + geoList[name]['attr'][8] + "</td>\n</tr>\n";
+				table_array.push(table_html);
+			}
 		}
 	}
 	table_array.sort();
@@ -158,6 +156,7 @@ function sample_selection(geoList, cid) {
 	sampleList.sort();
 
 	var table_array = [];
+
 	for(var i = 0; i < sampleList.length; i++) {
 		var fid = sampleList[i][3]; 
 		var id = fid.substr(0,3);
@@ -166,12 +165,8 @@ function sample_selection(geoList, cid) {
 		// save the sample info to html table
 		var table_html = '';
 
-		// if ( sampleList[i][7]) {
-			// table_html += "<tr><td><a href=\"psinfo?sid=" + sampleList[i][0] + "\" target=_blank>"+ sampleList[i][0] + "</a></td>\n";
-					table_html += "<tr><td>" + sampleList[i][0] + "</td>\n";
-		// } else {
-		// 	table_html += "<tr><td>" + sampleList[i][0] + "</td>\n";
-		// }
+		// table_html += "<tr><td><a href=\"psinfo?sid=" + sampleList[i][0] + "\" target=_blank>"+ sampleList[i][0] + "</a></td>\n";
+		table_html += "<tr><td>" + sampleList[i][0] + "</td>\n";
 		table_html += "<td>" + cname + "</td>\n";
 		table_html += "<td><a href=\"pflist?fid=" + fid + "\" >"+ id + "</a></td>\n";
 		table_html += "<td>" + sampleList[i][5] + "</td>\n";
@@ -184,20 +179,6 @@ function sample_selection(geoList, cid) {
 		table_html += "<td>" + sampleList[i][12] + "</td>\n";
 		table_html += "<td>" + sampleList[i][13] + "</td>\n";
 		table_html += "<td>" + sampleList[i][14] + "</td>\n";
-
-		// if ( sampleList[i][3][0]) {
-		// 	table_html += "<td><a href=# data-featherlight=\"/static/images/" + id + "/" + sampleList[i][5][0] + "\">Link</a></td>\n";
-		// } else {
-		// 	table_html += "<td>NA</td>\n";
-		// }
-				
-		// if ( sampleList[i][6][0] ) {
-		// 	table_html += "<td><a href=# data-featherlight=\"/static/images/" + id + "/" + sampleList[i][6][0] + "\">Link</a></td>\n";
-		// } else {
-		// 	table_html += "<td>NA</td>\n";
-		// }
-
-		//table_html += "<td>" + sampleList[i][16] + "</td>\n";
 
 		if ( sampleList[i][9]) {
 			table_html += "<td>Yes</td></tr>\n";
