@@ -319,12 +319,12 @@ def load_data_samplefield():
 		fid = (m[3].replace(" ", "")+m[4].replace(" ", "")+m[5].replace(" ", "")+m[6].replace(" ", "")) 
 		
 		fsize = ''
-		fimgs_exist = []
-		fimgs = m[0].split("/")
-		for fname in fimgs:
-			fpath = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/images/" + prefix + "/" + fname
-			if os.path.exists(fpath):
-				fimgs_exist.append(fname)
+		# fimgs_exist = []
+		# fimgs = m[0].split("/")
+		# for fname in fimgs:
+		# 	fpath = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/images/" + prefix + "/" + fname
+		# 	if os.path.exists(fpath):
+		# 		fimgs_exist.append(fname)
 
 		#test
 		pcr_759_760	= m[13]
