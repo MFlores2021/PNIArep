@@ -8,6 +8,8 @@ import MySQLdb
 # convert GPS location
 # from degree,min,sec to decimal_system
 # must be stay with load data
+
+
 def convert_GPS(gps_unit):
 	gps_unit = str(gps_unit)
 	ma = gps_unit.split(".")  
@@ -280,13 +282,13 @@ def load_data_samplefield():
 	# disconnect from server
 	db.close()
 
-
 	# set filter set, only load sample dataset which is cleaned 
 	data_clean_obj = load_data_clean();
 
 	# main for load data
 	data_obj = {}       # data object for store all data
 	sample_uniq = {}    # dict for check the sample uniq
+
 
 	for m in adh:
 
