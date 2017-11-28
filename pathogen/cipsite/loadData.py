@@ -9,7 +9,6 @@ import MySQLdb
 # from degree,min,sec to decimal_system
 # must be stay with load data
 
-
 def convert_GPS(gps_unit):
 	gps_unit = str(gps_unit)
 	ma = gps_unit.split(".")  
