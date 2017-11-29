@@ -102,12 +102,12 @@ function setMarkers(map, geoList, filters){
 	        marker.setMap(map);
 
 			// code for display field info in info window
-			var fieldInfo = "Field ID: <a href=pflist?fid="+name+">"+ geoList[name]['attr'][0] +"</a>";
-				fieldInfo += "<br />Departament: " + geoList[name]['attr'][1];
-				fieldInfo += "<br />Province: " + geoList[name]['attr'][2];
-				fieldInfo += "<br />District: " + geoList[name]['attr'][3];
-				fieldInfo += "<br />Locality: " + geoList[name]['attr'][4];
-				fieldInfo += "<br />Size: sacar de bd" ;//+ geoList[name]['attr'][5];
+			var fieldInfo = "Campo ID: <a href=pflist?fid="+name+">"+ geoList[name]['attr'][0] +"</a>";
+				fieldInfo += "<br />Departamento: " + geoList[name]['attr'][1];
+				fieldInfo += "<br />Provincia: " + geoList[name]['attr'][2];
+				fieldInfo += "<br />Distrito: " + geoList[name]['attr'][3];
+				fieldInfo += "<br />Localidad: " + geoList[name]['attr'][4];
+				fieldInfo += "<br />Altitud: " + geoList[name]['attr'][7] + " m.";
 
 			var sampleList = geoList[name]['samp'];
 			google.maps.event.addListener(marker,'click', (function(marker, fieldInfo, sampleList){ 
