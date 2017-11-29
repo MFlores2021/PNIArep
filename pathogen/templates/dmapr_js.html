@@ -67,7 +67,7 @@ function load_virus_data() {
 }
 
 // initialize map for field & sample
-function initialize_field_map() {
+function initialize_field_map(filters) {
 	var myCenter=new google.maps.LatLng(-20,-65);
 	var mapProp = {
 		center:myCenter,
@@ -76,100 +76,25 @@ function initialize_field_map() {
 	};
 	        	
 	fmap=new google.maps.Map(document.getElementById("fieldMap"),mapProp);
-	fmarkers = setMarkers(fmap, geoList); 
-	fmarkerCluster = new MarkerClusterer(fmap, fmarkers);
-}
-
-// initialize map for virus
-function initialize_virus_map(sel_name) {
-	var myCenter=new google.maps.LatLng(-20,-65);
-	var mapProp = {
-		center:myCenter,
-		zoom:3,
-		mapTypeId:google.maps.MapTypeId.ROADMAP
-	};
-
-	vmap=new google.maps.Map(document.getElementById("virusMap"),mapProp);
-	vmarkers = setVirusMarkers(vmap, virusList, sel_name); 
-	vmarkerCluster = new MarkerClusterer(vmap, vmarkers);
-}
-
-// update map for virus
-function update_virus_map(sel_name) {
-	for (var i = 0; i < vmarkers.length; i++) {
-		vmarkers[i].setMap(null);
-	}
-	vmarkerCluster.clearMarkers();
-	//vmarkerCluster = new MarkerClusterer(vmap, vmarkers);
-
-	vmarkers = setVirusMarkers(vmap, virusList, sel_name);
-	vmarkerClutser = new MarkerClusterer(vmap, vmarkers);
-}
-
-// set virus markers
-function setVirusMarkers(map, virusList, sel_name) {
-	var markers = [];
-	var gps_uniq = {};
-	for (var vid in virusList) {
-		if (virusList[vid]['short'] == sel_name || virusList[vid]['family'] == sel_name) {
-			for (var i in virusList[vid]['sample']) {
-				var sid = virusList[vid]['sample'][i][0];
-				var fid = virusList[vid]['sample'][i][2];
-				var lat = virusList[vid]['sample'][i][3];
-				var lng = virusList[vid]['sample'][i][4];
-
-				if (!(fid in gps_uniq)) {
-					gps_uniq[fid] = {};
-					gps_uniq[fid]['lat'] = lat;
-					gps_uniq[fid]['lng'] = lng;
-					gps_uniq[fid]['sample'] = {};
-					gps_uniq[fid]['sample'][sid] = 1;
-				} else {
-					gps_uniq[fid]['sample'][sid] = 1;
-				}
-			}	
-		}
-	}
-
-	for (var fid in gps_uniq) {
-		var lat = gps_uniq[fid]['lat'];
-		var lng = gps_uniq[fid]['lng'];
-		var latlngset = new google.maps.LatLng(lat, lng);
-		var marker = new google.maps.Marker({
-			map: map,
-			title: fid,
-			position: latlngset
-		});
-		markers.push(marker);
-		marker.setMap(map);
-
-		//code for display field info in info window
-		var sid_array = [];
-		for (var sid in gps_uniq[fid]['sample']) { sid_array.push(sid);}
-		var sid_char = sid_array.join();
-		var fieldInfo = "Field ID: <a href=flist?fid="+fid+"&sid="+sid_char+"&vname="+ encodeURIComponent(sel_name) +">"+fid+"</a>";
-
-		google.maps.event.addListener(marker,'click', ( function(marker, fieldInfo){ 
-			return function() {
-				if (vprev_infowindow) {
-					vprev_infowindow.close();
-				}
-				var infowindow = new google.maps.InfoWindow({ content: fieldInfo});
-				infowindow.open(map,marker);
-				vprev_infowindow = infowindow;
-			};
-		}) (marker, fieldInfo));
-	}
-	return markers;
+	fmarkers = setMarkers(fmap, geoList,filters); 
+	fmarkerCluster = new MarkerClusterer(fmap, fmarkers); 
 }
 
 // set field markers
-function setMarkers(map, geoList){
+function setMarkers(map, geoList,filters){
 	var marker; 
 	var markers = [];
 	for (var name in geoList) {
+
+		var filtered =0;
+		
+		for(var key in filters) {				
+	        if(geoList[name]['attr'][key] === undefined || geoList[name]['attr'][key] != filters[key]) { filtered += 0; }
+		    else  filtered += 1;
+		}
+
 		var lat = geoList[name]['attr'][4];
-		var lng = geoList[name]['attr'][3];
+		var lng = geoList[name]['attr'][5];
 		var latlngset = new google.maps.LatLng(lat, lng);
  		var marker = new google.maps.Marker({  
           	map: map, 
@@ -178,7 +103,7 @@ function setMarkers(map, geoList){
         	});
 		markers.push(marker);
         marker.setMap(map);
-console.log("lng");
+
 		// code for display field info in info window
 		var fieldInfo = "Field ID: <a href=flist?fid="+name+">"+name+"</a>";
 			fieldInfo += "<br />Region: " + geoList[name]['attr'][0];
@@ -196,23 +121,9 @@ console.log("lng");
 					infowindow.open(map,marker);
 					fprev_infowindow = infowindow;
 					
-					// code for showing sample list
-					/*var sampleTable = "";
-						for(var i = 0; i < sampleList.length; i++) {
-							sampleTable += "<p>Sample ID:" + sampleList[i][0];
-							sampleTable += "<br />Cultivar:" + sampleList[i][6];
-							sampleTable += "<br />Intercrop:" + sampleList[i][5];
-							sampleTable += "<br />Date:" + sampleList[i][1];
-							sampleTable += "<br />Age:" + sampleList[i][2];
-							sampleTable += "<br />Image:" + sampleList[i][3];
-							sampleTable += "<br />Leave:" + sampleList[i][4];
-							sampleTable += "</p>";
-						}
-						$("#sampleTab").html(sampleTable);
-						$("#fieldInfo").html(fieldInfo);
-					*/
         			};
     	})(marker,fieldInfo, sampleList)); 
+    	
 	}
 	return markers;
 }
@@ -220,9 +131,7 @@ console.log("lng");
 $(function() {
 	/* Load field & sample GPS and virus related GPS */
 	load_data();
-	//filter_data(); //filter sequenced dataset
-	//load_virus_data();
-//	google.maps.event.addDomListener(window, 'load', initialize_field_map);
+
 	virusList = geoList;
 
 	/* generate selection form for virus name and family */
@@ -232,9 +141,9 @@ $(function() {
     var sel_vfamily_uniq = {};
 	var sname_sort = [];
 	var family_sort = [];
-    for (var vid in virusList) {
+    for (var vid in virusList) { 
         var sname = virusList[vid]['short'];
-        var family = virusList[vid]['family'];
+        var family = virusList[vid]['attr'][0]; 
         if (!(sname in sel_vname_uniq)) {
 			sname_sort.push(sname);
 			sel_vname_uniq[sname] = sname;
@@ -245,44 +154,11 @@ $(function() {
             sel_vfamily_uniq[family] = family;
         }
     }
+    var filters = [] 
 initialize_field_map();
 	sname_sort.sort();
-	family_sort.sort();
-	for (var i=0; i<sname_sort.length; i++) {
-		var sname = sname_sort[i];
-		if (sname == 'Sweet potato leaf curl virus') {
-			sel_vname_html = "<option selected value=\""+ sname + "\">" + sname + "</option>\n" + sel_vname_html;
-		} else {
-			sel_vname_html += "<option value=\""+ sname + "\">" + sname + "</option>\n";
-		}
-	}
-	sel_vname_html = "<select class=\"form-control input-sm\" id=\"vname\" style=\"height:26px;\">\n" + sel_vname_html + "</select>\n";
+	family_sort.sort(); 
 
-	for (var i=0; i<family_sort.length; i++) {
-		var family = family_sort[i];
-		sel_vfamily_html += "<option value=\""+ family + "\">" + family + "</option>\n";
-	}
-	sel_vfamily_html = "&nbsp;<select class=\"form-control input-sm\" id=\"family\" style=\"height:26px;\">\n" + sel_vfamily_html + "</select>\n";
-
-	// action for tab of virus map
-	var sel_name = 'Sweet potato leaf curl virus';
-    $('#virusMapLink').on('shown.bs.tab', function(e) {
-		$('#vmapform').html(sel_vname_html + sel_vfamily_html);
-		$('#vname').on('change', function(){
-			sel_name = $('#vname').val();
-			//update_virus_map(sel_name);
-			initialize_virus_map(sel_name);
-		});
-		
-		$('#family').on('change', function(){
-			sel_name = $('#family').val();
-			initialize_virus_map(sel_name);
-		});
-
-        if( vmap == undefined) {
-			initialize_virus_map(sel_name);
-        }	
-    });
 })
 
 </script>
