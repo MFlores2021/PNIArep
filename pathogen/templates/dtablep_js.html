@@ -54,49 +54,52 @@ function test_selection(virusList, selectName, selectCID) {
 			var matingtype  = geoList[vid]['test'][i][3];
 			var fta = geoList[vid]['test'][i][26];
 			var nfta = geoList[vid]['test'][i][27];
-			var rflp = geoList[vid]['test'][i][4];
-			var aflp = geoList[vid]['test'][i][5];
+			var year = geoList[vid]['test'][i][4];
+			var host = geoList[vid]['test'][i][5];
 			var haplotypes = geoList[vid]['test'][i][6];
-			var gpiacetate = geoList[vid]['test'][i][7];
-			var gpistarch = geoList[vid]['test'][i][8];
-			var pepacetate = geoList[vid]['test'][i][9];
+			var race = geoList[vid]['test'][i][10];
+			var genotypic = geoList[vid]['test'][i][8];
+			var clonal = geoList[vid]['test'][i][9];
 			var peppage = geoList[vid]['test'][i][10];
-			var metalaxyl = geoList[vid]['test'][i][11];
+			var metalaxyl = geoList[vid]['test'][i][12];
 			var pesticides = geoList[vid]['test'][i][25];
 			var observation = geoList[vid]['test'][i][12];
 			var field = fid.substr(0,3);
 
 			var table_html = '';
-			table_html += "<tr><td>" + "P. Infestans" + "</td>\n";
+			table_html += "<tr>\n";
 			// table_html += "<td><a href=psinfo?sid=" + sid + " target=_blank>" + sid + "</a></td>\n";
 			table_html += "<td>" + sid + "</td>\n";
-			table_html += '<td>' + isolateid + '</td>\n';
+			// table_html += '<td>' + isolateid + '</td>\n';
 			table_html += "<td><a href=pflist?fid=" + fid + " target=_blank>" + field + "</a></td>\n";
-			table_html += '<td>' + fta + '</td>\n';
-			table_html += '<td>' + nfta + '</td>\n';
-			table_html += '<td>' + pesticides  + '</td>\n';
+			// table_html += '<td>' + fta + '</td>\n';
+			// table_html += '<td>' + nfta + '</td>\n';
+			// table_html += '<td>' + pesticides  + '</td>\n';
+			table_html += '<td>' + year + '</td>\n';
+			table_html += '<td>' + host + '</td>\n';
 			table_html += '<td>' + matingtype  + '</td>\n';
-			table_html += '<td>' + rflp + '</td>\n';
-			table_html += '<td>' + aflp + '</td>\n';
+			
 			table_html += '<td>' + haplotypes + '</td>\n';
-			table_html += '<td>' + gpiacetate + '</td>\n';
-			table_html += '<td>' + gpistarch + '</td>\n';
-			table_html += '<td>' + pepacetate + '</td>\n';
-			table_html += '<td>' + peppage + '</td>\n';
+			// table_html += '<td>' + gpiacetate + '</td>\n';
+			// table_html += '<td>' + gpistarch + '</td>\n';
+			// table_html += '<td>' + pepacetate + '</td>\n';
+			// table_html += '<td>' + peppage + '</td>\n';
 			table_html += '<td>' + metalaxyl + '</td>\n';	
-			table_html += '<td>' + geoList[vid]['test'][i][13] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][14] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][15] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][16] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][17] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][18] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][19] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][20] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][21] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][22] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][23] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][24] + '</td>\n';
-			table_html += '<td>' + observation + '</td></tr>\n';
+			table_html += '<td>' + race + '</td>\n';
+			table_html += '<td>' + genotypic + '</td>\n';
+			// table_html += '<td>' + geoList[vid]['test'][i][13] + '</td>\n';
+			// table_html += '<td>' + geoList[vid]['test'][i][14] + '</td>\n';
+			// table_html += '<td>' + geoList[vid]['test'][i][15] + '</td>\n';
+			// table_html += '<td>' + geoList[vid]['test'][i][16] + '</td>\n';
+			// table_html += '<td>' + geoList[vid]['test'][i][17] + '</td>\n';
+			// table_html += '<td>' + geoList[vid]['test'][i][18] + '</td>\n';
+			// table_html += '<td>' + geoList[vid]['test'][i][19] + '</td>\n';
+			// table_html += '<td>' + geoList[vid]['test'][i][20] + '</td>\n';
+			// table_html += '<td>' + geoList[vid]['test'][i][21] + '</td>\n';
+			// table_html += '<td>' + geoList[vid]['test'][i][22] + '</td>\n';
+			// table_html += '<td>' + geoList[vid]['test'][i][23] + '</td>\n';
+			// table_html += '<td>' + geoList[vid]['test'][i][24] + '</td>\n';
+			table_html += '<td>' + clonal + '</td></tr>\n';
  
 			var key = sid + geoList[vid]['short'];
 			if (!(key in virus_uniq)) {
@@ -129,11 +132,11 @@ function field_selection(geoList, cid) {
 				table_html += "<td>" + geoList[name]['attr'][1] + "</td>\n";
 				table_html += "<td>" + geoList[name]['attr'][2] + "</td>\n";
 				table_html += "<td>" + geoList[name]['attr'][3] + "</td>\n";
-				table_html += "<td>" + geoList[name]['attr'][4] + "</td>\n";
+				// table_html += "<td>" + geoList[name]['attr'][4] + "</td>\n";
 				table_html += "<td>" + lat.toFixed(5) + "</td>\n";
 				table_html += "<td>" + lng.toFixed(5) + "</td>\n";
-				table_html += "<td>" + geoList[name]['attr'][7] + "</td>\n";
-				table_html += "<td>" + geoList[name]['attr'][8] + "</td>\n</tr>\n";
+				table_html += "<td>" + geoList[name]['attr'][7] + "</td>\n</tr>\n";
+				// table_html += "<td>" + geoList[name]['attr'][8] + "</td>\n</tr>\n";
 				table_array.push(table_html);
 			}
 		}
@@ -263,10 +266,10 @@ $(function(){
 
 
 	/* display sample list */
-	var scountry_id = 'ALL';    // set all for default
-	var scountry_name = 'All';  // set all for default
-	var sampleTablePage = sample_selection(geoList, scountry_id);
-	$('#sampleTable tbody').html(sampleTablePage);
+	// var scountry_id = 'ALL';    // set all for default
+	// var scountry_name = 'All';  // set all for default
+	// var sampleTablePage = sample_selection(geoList, scountry_id);
+	// $('#sampleTable tbody').html(sampleTablePage);
 
 
 	/* display virus list */

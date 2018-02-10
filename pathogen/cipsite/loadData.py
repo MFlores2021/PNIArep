@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import os, sys
 import os.path
 from django.conf import settings
@@ -30,81 +32,6 @@ def convert_GPS(gps_unit):
 	gps_decimal = "%.5f" % gps_decimal
 	return gps_decimal
 
-# load dataset
-def load_data():
-	datafile = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/data.txt"
-
-	# set filter set, only load sample dataset which is cleaned 
-	data_clean_obj = load_data_clean();
-
-	# main for load data
-	data_obj = {}       # data object for store all data
-	sample_uniq = {}    # dict for check the sample uniq
-	dh = open(datafile, "r")
-	for line in dh:
-		if line[0] == "#":
-			continue
-		line = line.strip("\n")
-		m = line.split("\t")
-		# print len(m)
-
-		# attribute for sample
-		sampleID = m[0]
-		prefix = sampleID[0:2]
-		sdate = m[1]
-		sage  = m[9]
-		simgs_exist = []
-		slimgs_exist = []
-		simgs = m[12].split("/")
-		slimgs = m[13].split("/")
-		sintercrop = m[14]
-		scultivar = m[15]
-
-		for fname in simgs:
-			fpath = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/images/" + prefix + "/" + fname
-			if os.path.exists(fpath):
-				simgs_exist.append(fname)
-
-		for fname in slimgs:
-			fpath = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/images/" + prefix + "/" + fname
-			if os.path.exists(fpath):
-				slimgs_exist.append(fname)
-
-		if sampleID in sample_uniq.keys():
-			sys.stderr.write('[ERR]dup sample ID ', sampleID, "\n")
-		else:
-			sample_uniq[sampleID] = 1
-
-		sequenced = 0
-		if sampleID in data_clean_obj:
-			sequenced = 1
-
-		# attribute for field
-		region = m[2]
-		district = m[3]
-		locality = m[4]
-		fid = m[5]
-		lng = m[6]
-		lat = m[7]
-		#lng = convert_GPS(m[6])
-		#lat = convert_GPS(m[7])
-		alt = m[8]
-		fsize = m[10]
-		fimgs_exist = []
-		fimgs = m[11].split("/")
-		for fname in fimgs:
-			fpath = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/images/" + prefix + "/" + fname
-			if os.path.exists(fpath):
-				fimgs_exist.append(fname)
-
-		if fid not in data_obj.keys():
-			data_obj[fid] = {}
-			data_obj[fid]['attr'] = [region, district, locality, lat, lng, alt, fsize, fimgs_exist, fid]
-			data_obj[fid]['samp'] = []
-			data_obj[fid]['samp'].append([sampleID, sdate, sage, simgs_exist, slimgs_exist, sintercrop, scultivar, sequenced])
-		else:
-			data_obj[fid]['samp'].append([sampleID, sdate, sage, simgs_exist, slimgs_exist, sintercrop, scultivar, sequenced])
-	return data_obj
 
 # load data clean
 def load_data_clean():
@@ -142,10 +69,33 @@ def load_data_clean():
 
 	return dataCleanObj
 
+def p_summary():
+	db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
+	# prepare a cursor object using cursor() method
+	cursor = db.cursor()
 
-# load dataset Phytoptora
+	# execute SQL query using execute() method.
+	cursor.execute("SELECT department,COUNT(*) FROM `phytoptora` GROUP BY department")
+	#cursor.execute("SELECT * from phytoptora")
+	adh = cursor.fetchall()
+
+	# disconnect from server
+	db.close()
+
+	data_obj = {}
+
+	for m in adh:
+		sid = m[0] #.upper()
+		value = m[1]
+		data_obj[sid] = {}
+		data_obj[sid] = value
+
+	return data_obj
+
+#phytoptora
+
 def pload_data_samplefield():
-	db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia")
+	db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
 	# prepare a cursor object using cursor() method
 	cursor = db.cursor()
 
@@ -166,19 +116,15 @@ def pload_data_samplefield():
 	data_obj = {}       # data object for store all data
 	sample_uniq = {}    # dict for check the sample uniq
 	
-	print len(adh)
-
 	for m in adh:
 
-		#print len(m)
-
 		# attribute for sample
-		sampleID = m[1]
+		sampleID = m[5]
 		isolateID = m[2]
 		prefix = sampleID[0:2]
 		fta = m[3]
 		nofta = m[4]
-		shost = m[5]  #host
+		shost = m[7]  #host
 		svariety = m[6]  #variety
 		srace = m[19]
 		srack = m[42]
@@ -187,34 +133,36 @@ def pload_data_samplefield():
 		svials = m[45]
 		scollector = m[20]
 		sdatecollection = m[21]
-		sdate = m[41]
+		sdate = m[6]
 
-		if len(sdate.split("/")) == 3 :
-			syear = sdate.split("/")[2]
-		else:
-			syear = "Unknown"
-
+		# if len(sdate.split("/")) == 3 :
+		# 	syear = sdate.split("/")[2]
+		# else:
+		# 	syear = "Unknown"
+		syear = sdate
 		sobservation = m[28]
 
-		if sampleID in sample_uniq.keys():
-			sys.stderr.write('[ERR]dup sample ID ', sampleID, "\n")
-		else:
-			sample_uniq[sampleID] = 1
+		# if sampleID in sample_uniq.keys():
+		# 	sys.stderr.write('[ERR]dup sample ID ', sampleID, "\n")
+		# else:
+		sample_uniq[sampleID] = 1
 
 		sequenced = 0
 		if sampleID in data_clean_obj:
 			sequenced = 1
-
+		
 		# attribute for field
-		department = m[7]
-		province = m[8]
-		district = m[9]
-		locality = m[10]
-		reference = m[11]
-		lat = m[12]
-		lng = m[13]
-		alt = m[14]
-		fid = (m[7].replace(" ", "")+m[8].replace(" ", "")+m[9].replace(" ", "")+m[10].replace(" ", ""))  #m[3]
+		# department =  to_unicode_or_bust(m[7])
+		department = m[8]
+		province = m[9]
+		district = m[10]
+		latitude = m[13]
+		longitude = m[14]
+		altitude      = m[15]
+
+		locality = m[6]
+		fid = (m[8].replace(" ", "")+m[9].replace(" ", "")+m[10].replace(" ", "")) 
+		#fid = (m[7].replace(" ", "")+m[8].replace(" ", "")+m[9].replace(" ", "")+m[10].replace(" ", ""))  #m[3]
 
 		#test
 		pesticides = m[15]
@@ -223,8 +171,8 @@ def pload_data_samplefield():
 		aflp  = m[23]
 		haplotypes  = m[17]
 		metalaxyl  = m[18]
-		gpiacetate  = m[24]
-		gpistarch  = m[25]
+		genotypic  = m[20]
+		clonal  = m[21]
 		pepacetate  = m[26]
 		peppage   = m[27]
 		
@@ -244,18 +192,18 @@ def pload_data_samplefield():
 
 		if fid not in data_obj.keys():
 			data_obj[fid] = {}
-			data_obj[fid]['attr'] = [isolateID,department, province, district, locality, lat, lng, alt, reference]
+			data_obj[fid]['attr'] = [isolateID,department, province, district, locality, latitude, longitude, altitude]
 			data_obj[fid]['samp'] = []
 			data_obj[fid]['sampl'] = []
 			data_obj[fid]['test'] = []
-			data_obj[fid]['test'].append([sampleID, isolateID, fid, matingtype, rflp , aflp , haplotypes , gpiacetate , gpistarch , pepacetate , peppage, metalaxyl, sobservation, pig11, pi02, ssr11, d13, ssr8, ssr4, pi04, pi70, ssr6, pi63, ssr2, pi4b, pesticides,fta,nofta ])
-			data_obj[fid]['sampl'].append([sampleID, shost, svariety, srace, srack, sbox, sgrid, svials, scollector, sdatecollection, sequenced])
+			data_obj[fid]['test'].append([sampleID, isolateID, fid, matingtype, sdate, shost,  haplotypes, srace  , genotypic , clonal ,  peppage, metalaxyl, sobservation, pig11, pi02, ssr11, d13, ssr8, ssr4, pi04, pi70, ssr6, pi63, ssr2, pi4b, pesticides,fta,nofta ])
+			data_obj[fid]['sampl'].append([sampleID, shost, sdate, srace, genotypic , clonal ])
 			data_obj[fid]['samp'].append([sampleID, isolateID, (isolateID), fid, sdate, shost, svariety, srace, srack, sbox, sgrid, svials, scollector, sdatecollection, sdate,sequenced])
 		else:
 			#data_obj[fid]['samp'] = []
 			#data_obj[fid]['sampl'] = []
-			data_obj[fid]['test'].append([sampleID, isolateID, fid, matingtype, rflp , aflp , haplotypes , gpiacetate , gpistarch , pepacetate , peppage, metalaxyl, sobservation, pig11, pi02, ssr11, d13, ssr8, ssr4, pi04, pi70, ssr6, pi63, ssr2, pi4b, pesticides,fta,nofta ])
-			data_obj[fid]['sampl'].append([sampleID, shost, svariety, srace, srack, sbox, sgrid, svials, scollector, sdatecollection, sdate,  sobservation, sequenced])
+			data_obj[fid]['test'].append([sampleID, isolateID, fid, matingtype, sdate, shost,  haplotypes, srace  , genotypic , clonal ,  peppage, metalaxyl, sobservation, pig11, pi02, ssr11, d13, ssr8, ssr4, pi04, pi70, ssr6, pi63, ssr2, pi4b, pesticides,fta,nofta ])
+			data_obj[fid]['sampl'].append([sampleID, shost, sdate, srace, genotypic , clonal  ])
 			data_obj[fid]['samp'].append([sampleID, isolateID, (isolateID), fid, sdate, shost, svariety, srace, srack, sbox, sgrid, svials, scollector, sdatecollection, sdate,sequenced])
 	
 	#db.close()
@@ -268,7 +216,7 @@ def pload_data_samplefield():
 def load_data_samplefield():
 	#datafile = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/data1.txt"
 
-	db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia")
+	db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
 	# prepare a cursor object using cursor() method
 	cursor = db.cursor()
 
@@ -292,32 +240,29 @@ def load_data_samplefield():
 	for m in adh:
 
 		# attribute for sample
-		sampleID = m[1]
-		prefix = sampleID[0:2]
-		isolate = m[7]
-		sdate = m[2]
-		scultivar = m[9]
-		shost = m[8]
+		sampleID = m[5]
+		# prefix 	= sampleID[0:2]
+		sdate = m[6]
+		shost = m[7]
 
-
-		if sampleID in sample_uniq.keys():
-			sys.stderr.write('[ERR]dup sample ID ', sampleID, "\n")
-		else:
-			sample_uniq[sampleID] = 1
+		# if sampleID in sample_uniq.keys():
+		# 	sys.stderr.write('[ERR]dup sample ID ', sampleID, "\n")
+		# else:
+		sample_uniq[sampleID] = 1
 
 		sequenced = 0
 		if sampleID in data_clean_obj:
 			sequenced = 1
 
 		# attribute for field
-		department = m[3]
-		province = m[4]
-		district = m[5]
+		department = m[8]
+		province = m[9]
+		district = m[10]
+		latitude = m[13]
+		longitude = m[14]
+		altitude      = m[15]
 		locality = m[6]
-		lat = m[10]
-		lng = m[11]
-		alt = m[12]
-		fid = (m[3].replace(" ", "")+m[4].replace(" ", "")+m[5].replace(" ", "")+m[6].replace(" ", "")) 
+		fid = (m[8].replace(" ", "")+m[9].replace(" ", "")+m[10].replace(" ", "")) 
 		
 		fsize = ''
 		# fimgs_exist = []
@@ -328,26 +273,205 @@ def load_data_samplefield():
 		# 		fimgs_exist.append(fname)
 
 		#test
-		pcr_759_760	= m[13]
-		biovar = m[14]
-		pcr_nmult = m[15]
-		phylotype = m[16]
-		sequevar = m[17]
-		ncbi_acc = m[18]
+		biovar = m[27]
+		phylotype = m[28]
+		sequevar = m[29]
+		ncbi_acc = m[30]
 		
 
 		if fid not in data_obj.keys():
 			data_obj[fid] = {}
-			data_obj[fid]['attr'] = [department,province, district, locality, lat, lng, alt]
+			data_obj[fid]['attr'] = [department,province, district, locality, latitude, longitude, altitude]
 			data_obj[fid]['samp'] = []
 			data_obj[fid]['test'] = []
-			data_obj[fid]['test'].append([sampleID, fid, pcr_759_760, biovar, pcr_nmult, phylotype, sequevar, ncbi_acc])
-			data_obj[fid]['samp'].append([sampleID, fid, isolate, sdate, shost, scultivar, sequenced])
+			data_obj[fid]['test'].append([sampleID, fid, biovar, phylotype, sequevar, ncbi_acc, sdate, shost, sequenced])
+			data_obj[fid]['samp'].append([sampleID, fid, sdate, shost, sequenced])
 		else:
-			data_obj[fid]['test'].append([sampleID, fid, pcr_759_760, biovar, pcr_nmult, phylotype, sequevar, ncbi_acc])
-			data_obj[fid]['samp'].append([sampleID, fid, isolate, sdate, shost, scultivar, sequenced])
+			data_obj[fid]['test'].append([sampleID, fid, biovar, phylotype, sequevar, ncbi_acc, sdate, shost, sequenced])
+			data_obj[fid]['samp'].append([sampleID, fid, sdate, shost, sequenced])
 	
 	#db.close()
+
+	return data_obj
+	
+
+#Virome:
+
+def vload_data_samplefield():
+	db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
+	# prepare a cursor object using cursor() method
+	cursor = db.cursor()
+
+	# execute SQL query using execute() method.
+	cursor.execute("SELECT * from virome")
+
+	# Fetch a single row using fetchone() method.
+	adh = cursor.fetchall()
+
+	# disconnect from server
+	db.close()
+
+
+	# set filter set, only load sample dataset which is cleaned 
+	data_clean_obj = load_data_clean();
+
+	# main for load data
+	data_obj = {}       # data object for store all data
+	sample_uniq = {}    # dict for check the sample uniq
+	
+	for m in adh:
+
+		# attribute for sample
+		sampleID = m[5]
+		isolateID = m[2]
+		prefix = sampleID[0:2]
+		shost = m[7]  #host
+		svariety = m[6]  #variety
+		scollector = m[20]
+		sdatecollection = m[21]
+		sdate = m[6]
+		field = m[12]
+		# if len(sdate.split("/")) == 3 :
+		# 	syear = sdate.split("/")[2]
+		# else:
+		# 	syear = "Unknown"
+		syear = sdate
+		sobservation = m[28]
+
+		# if sampleID in sample_uniq.keys():
+		# 	sys.stderr.write('[ERR]dup sample ID ', sampleID, "\n")
+		# else:
+		sample_uniq[sampleID] = 1
+
+		sequenced = 0
+		if sampleID in data_clean_obj:
+			sequenced = 1
+		
+		# attribute for field
+		# department =  to_unicode_or_bust(m[7])
+		department = m[8]
+		province = m[9]
+		district = m[10]
+		latitude = m[13]
+		longitude = m[14]
+		altitude      = m[15]
+
+		locality = m[11]
+		fid = (m[8].replace(" ", "")+m[9].replace(" ", "")+m[10].replace(" ", "")) 
+
+		#test
+		cultivarage= m[31]
+		phenologic= m[32]
+		fieldsize= m[33]
+		fieldpict= m[34]
+		plantpict= m[35]
+		leavepict= m[36]
+		intercultivar= m[37]
+		cultivar= m[38]
+		seedorigin= m[39]
+		management= m[40]
+		pesticides= m[41]
+		commonvirus= m[42]
+		newvirus= m[43]
+		novelvirus= m[44]
+		symptoms= m[45]
+
+		if fid not in data_obj.keys():
+			data_obj[fid] = {}
+			data_obj[fid]['attr'] = [isolateID,department, province, district, locality, latitude, longitude, altitude]
+			data_obj[fid]['samp'] = []
+			data_obj[fid]['sampl'] = []
+			data_obj[fid]['test'] = []
+			data_obj[fid]['test'].append([sampleID,  fid,  sdate, shost, cultivar, cultivarage, phenologic, intercultivar, field, fieldsize, fieldpict, plantpict, leavepict, seedorigin, management, pesticides, commonvirus, newvirus, novelvirus, symptoms ])
+			data_obj[fid]['sampl'].append([sampleID, sdate,shost,cultivar,  sequenced  ])
+			data_obj[fid]['samp'].append([sampleID, isolateID, (isolateID), fid, sdate, shost, svariety, sequenced])
+		else:
+			#data_obj[fid]['samp'] = []
+			#data_obj[fid]['sampl'] = []
+			data_obj[fid]['test'].append([sampleID,  fid,  sdate, shost, cultivar, cultivarage, phenologic, intercultivar, field, fieldsize, fieldpict, plantpict, leavepict, seedorigin, management, pesticides, commonvirus, newvirus, novelvirus, symptoms ])
+			data_obj[fid]['sampl'].append([sampleID, sdate, shost,cultivar, sequenced  ])
+			data_obj[fid]['samp'].append([sampleID, isolateID, (isolateID), fid, sdate, shost, svariety, sequenced])
+	
+	#db.close()
+
+	return data_obj
+
+
+
+#map
+
+
+def load_map():
+	#datafile = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/data1.txt"
+
+	db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
+	# prepare a cursor object using cursor() method
+	cursor = db.cursor()
+	cursor1 = db.cursor()
+	cursorp = db.cursor()
+
+	# execute SQL query using execute() method.
+	cursor.execute("SELECT CIPnumber,latitude, longitude, province from ralstonia")
+	cursorp.execute("SELECT CIPnumber,latitude, longitude, province from phytoptora")
+	# cursor1.execute("SELECT department,COUNT(*) FROM `ralstonia` GROUP BY department")
+	# SELECT CIPnumber,latitude, longitude, province from `ralstonia` union SELECT CIPnumber,latitude, longitude, province FROM `phytoptora` 
+	# SELECT department,COUNT(*) FROM `phytoptora` GROUP BY department union SELECT department,COUNT(*) FROM `ralstonia` GROUP BY department
+	cursor1.execute("SELECT department,COUNT(*),'phytoptora' FROM `phytoptora` GROUP BY department union SELECT department,COUNT(*),'ralstonia' FROM `ralstonia` GROUP BY department")
+	# Fetch a single row using fetchone() method.
+	adh = cursor.fetchall()
+	adh1 = cursor1.fetchall()
+	adhp = cursorp.fetchall()
+	# disconnect from server
+	db.close()
+
+	# set filter set, only load sample dataset which is cleaned 
+	data_clean_obj = load_data_clean();
+
+	# main for load data
+	data_obj = {}       # data object for store all data
+	sample_uniq = {}    # dict for check the sample uniq
+
+	data_obj["ral"] = {}
+
+	for m in adh:
+
+		province = m[3]
+		latitude = m[1]
+		longitude = m[2]
+		CIPnumber = m[0]
+		# if fid not in data_obj.keys():
+
+		data_obj["ral"] [CIPnumber] = {}
+		data_obj["ral"] [CIPnumber]['attr'] = [latitude, longitude, province]
+		# else:
+		# 	data_obj[fid]['test'].append([sampleID, fid, biovar, phylotype, sequevar, ncbi_acc])
+		# 	data_obj[fid]['samp'].append([sampleID, fid, sdate, shost, sequenced])
+
+	data_obj["phy"] = {}
+	for m in adhp:
+
+		province = m[3]
+		latitude = m[1]
+		longitude = m[2]
+		CIPnumber = m[0]
+		# if fid not in data_obj.keys():
+
+		data_obj["phy"] [CIPnumber] = {}
+		data_obj["phy"] [CIPnumber]['attr'] = [latitude, longitude, province]
+
+
+	data_obj["sum"] = {}
+	data_obj["sum"]["ralstonia"] = {}
+	data_obj["sum"]["phytoptora"] = {}
+
+	for m in adh1:
+		sid = m[0] #.upper()
+		value = m[1]
+		pat = m[2]
+		data_obj["sum"][pat][sid] = {}
+		data_obj["sum"][pat][sid] = value
+
+
 
 	return data_obj
 	

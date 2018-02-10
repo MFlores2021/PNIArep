@@ -10,7 +10,7 @@ var country = { PE:'Peru'};
 function load_data() {
 	$.ajax({
 		//url: '{{ dbURL }}',
-		url: '/{{ SUB_FDR }}/list_samplefield/',
+		url: '/{{ SUB_FDR }}/vlist_samplefield/',
 		async: false,
 		dataType: 'json',
 		success: function (data) {
@@ -45,27 +45,41 @@ function filter_data() {
 function test_selection(virusList, selectName, selectCID) {
 	var table_array = [];
 	var virus_uniq = {};
+
 	for (var vid in geoList) { console.log(geoList[vid]['test']);
 		for (var i = 0; i< geoList[vid]['test'].length; i++) {
 			var sid = geoList[vid]['test'][i][0];
+			var isolateid = geoList[vid]['test'][i][1];
 			var fid = geoList[vid]['test'][i][1];
-			var biovar = geoList[vid]['test'][i][2];
-			var phylotype = geoList[vid]['test'][i][3];
-			var sequevar = geoList[vid]['test'][i][4];
-			var ncbi_acc = geoList[vid]['test'][i][5];
-			var year = geoList[vid]['test'][i][6];
-			var host = geoList[vid]['test'][i][7];
+			var year = geoList[vid]['test'][i][2];
+			var host = geoList[vid]['test'][i][3];
+			var observation = geoList[vid]['test'][i][12];
+			var field = fid.substr(0,3);
 
 			var table_html = '';
-			table_html += "<tr><td>" + sid + "</td>\n";
-			table_html += "<td><a href=flist?fid=" + fid + " target=_blank>" + fid.substr(0,3); + "</a></td>\n";
-			table_html += "<td>" + host + "</td>\n";
-			table_html += "<td>" + year + "</td>\n";
-			table_html += '<td>' + biovar + '</td>\n';
-			table_html += '<td>' + phylotype + '</td>\n';
-			table_html += '<td>' + sequevar + '</td>\n';
-			table_html += '<td><a href="https://www.ncbi.nlm.nih.gov/nuccore/' + ncbi_acc + '"</a>' + ncbi_acc + '</td>\n</tr>\n';
-
+			table_html += "<tr>\n";
+			// table_html += "<td><a href=psinfo?sid=" + sid + " target=_blank>" + sid + "</a></td>\n";
+			table_html += "<td>" + sid + "</td>\n";
+			table_html += "<td><a href=vflist?fid=" + fid + " target=_blank>" + field + "</a></td>\n";
+			table_html += '<td>' + year + '</td>\n';
+			table_html += '<td>' + host + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][4] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][5] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][6] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][7] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][8] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][9] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][10] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][11] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][12] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][13] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][14] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][15] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][16] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][17] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][18] + '</td>\n';
+			table_html += '<td>' + geoList[vid]['test'][i][19]  + '</td></tr>\n';
+ 
 			var key = sid + geoList[vid]['short'];
 			if (!(key in virus_uniq)) {
 				table_array.push(table_html);
@@ -81,26 +95,27 @@ function test_selection(virusList, selectName, selectCID) {
 /* select field according to country id */
 function field_selection(geoList, cid) {
 	var table_array = [];
-	for (var name in geoList) { 
+	for (var name in geoList) {
 		var id = name.substr(0,2);
 		var ffid = name.substr(0,3);
 
 		if (ffid != "" ){ 
-
 			if (cid == id || cid == 'ALL') {
 				var table_html = '';
 				var cname = 'Peru';
-				var lat = parseFloat(geoList[name]['attr'][4]);
-				var lng = parseFloat(geoList[name]['attr'][5]);
+				var lat = parseFloat(geoList[name]['attr'][5]);
+				var lng = parseFloat(geoList[name]['attr'][6]);
+				if (id in country) { cname = country[id]; }
 				table_html += "<tr><td>" + cname + "</td>\n";
-				table_html += "<td><a href=flist?fid="+name+">" + ffid + "</a></td>\n";
-				table_html += "<td>" + geoList[name]['attr'][0] + "</td>\n";
+				table_html += "<td><a href=vflist?fid="+name+">" + name.substr(0,3); + "</a></td>\n";
 				table_html += "<td>" + geoList[name]['attr'][1] + "</td>\n";
 				table_html += "<td>" + geoList[name]['attr'][2] + "</td>\n";
-				// table_html += "<td>" + geoList[name]['attr'][3] + "</td>\n";
+				table_html += "<td>" + geoList[name]['attr'][3] + "</td>\n";
+				// table_html += "<td>" + geoList[name]['attr'][4] + "</td>\n";
 				table_html += "<td>" + lat.toFixed(5) + "</td>\n";
 				table_html += "<td>" + lng.toFixed(5) + "</td>\n";
-				table_html += "<td>" + geoList[name]['attr'][6] + "</td>\n</tr>\n";
+				table_html += "<td>" + geoList[name]['attr'][7] + "</td>\n</tr>\n";
+				// table_html += "<td>" + geoList[name]['attr'][8] + "</td>\n</tr>\n";
 				table_array.push(table_html);
 			}
 		}
@@ -123,25 +138,40 @@ function sample_selection(geoList, cid) {
 	sampleList.sort();
 
 	var table_array = [];
-	for(var i = 0; i < sampleList.length; i++) {
-		var fid = sampleList[i][1];
-		var id = fid.substr(0,2);
-		var cname = 'Peru'; //country[id];
-		var ffid = fid.substr(0,3);
 
+	for(var i = 0; i < sampleList.length; i++) {
+		var fid = sampleList[i][3]; 
+		var id = fid.substr(0,3);
+		var cname = sampleList[i][1] ; //country[id];
+			
 		// save the sample info to html table
 		var table_html = '';
-		
+
+		// table_html += "<tr><td><a href=\"psinfo?sid=" + sampleList[i][0] + "\" target=_blank>"+ sampleList[i][0] + "</a></td>\n";
 		table_html += "<tr><td>" + sampleList[i][0] + "</td>\n";
-		table_html += "<td><a href=\"flist?fid=" + fid + "\" >"+ ffid + "</a></td>\n";
-		table_html += "<td>" + sampleList[i][2] + "</td>\n";
-		table_html += "<td>" + sampleList[i][3] + "</td>\n";
+		table_html += "<td>" + cname + "</td>\n";
+		table_html += "<td><a href=\"vflist?fid=" + fid + "\" >"+ id + "</a></td>\n";
+		table_html += "<td>" + sampleList[i][5] + "</td>\n";
+		table_html += "<td>" + sampleList[i][6] + "</td>\n";
+		table_html += "<td>" + sampleList[i][7] + "</td>\n";
+		table_html += "<td>" + sampleList[i][8] + "</td>\n";
+		table_html += "<td>" + sampleList[i][9] + "</td>\n";
+		table_html += "<td>" + sampleList[i][10] + "</td>\n";
+		table_html += "<td>" + sampleList[i][11] + "</td>\n";
+		table_html += "<td>" + sampleList[i][12] + "</td>\n";
+		table_html += "<td>" + sampleList[i][13] + "</td>\n";
+		table_html += "<td>" + sampleList[i][14] + "</td>\n";
+
+		if ( sampleList[i][9]) {
+			table_html += "<td>Yes</td></tr>\n";
+		} else {
+			table_html += "<td>No</td></tr>\n";
+		}
 
 		// push the select sample to array
 		if (cid == id || cid == 'ALL') {
 			table_array.push(table_html);
 		}
-		
 	}
 	return table_array;
 }

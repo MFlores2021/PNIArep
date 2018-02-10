@@ -30,7 +30,7 @@
 		        <tr><td>Departament:</td>        <td>{{ departament }}</td></tr>
 		        <tr><td>Province:</td>        <td>{{ province }}</td></tr>
 		        <tr><td>District:</td>      <td>{{ district }}</td></tr>
-	            <tr><td>Locality:</td>      <td>{{ locality }}</td></tr>
+	            <!-- <tr><td>Locality:</td>      <td>{{ locality }}</td></tr> -->
 	            <tr><td>Latitude:</td>  <td><span id=lat>{{ lat }}</span>&#176;</td></tr>
 	            <tr><td>Longitude:</td> <td><span id=lng>{{ lng }}</span>&deg;</td></tr>
 	            <tr><td>Altitude:</td>  <td>{{ alt }} m</td></tr>
@@ -83,10 +83,10 @@
         <tr>
         <th><b>Sample</b></td>
         <th><b>Field</b></td>
-        <th><b>Isolate source</b></td>
-        <th><b>Date (DD/MM/YYYY)</b></td>
+        <!-- <th><b>Isolate source</b></td> -->
+        <th><b>Date</b></td>
         <th><b>Host</b></td>
-        <th><b>Cultivar</b></td>
+        <!-- <th><b>Cultivar</b></td> -->
 		<th><b>Sequenced</b></td>
         </tr>
         {% for s in sample %}
@@ -95,7 +95,8 @@
           {% if forloop.counter0 == 0 %}
 			{% if s.7 == 1 %}
           		<td>
-					<a href="sinfo?sid={{ e }}" target=_blank>{{ e }}</a>
+					<!-- <a href="sinfo?sid={{ e }}" target=_blank>{{ e }}</a> -->
+					<a>{{ e }}</a>
 					<tr><td>Departament:</td>        <td>{{ departament }}</td></tr>
 					{% if e in select %} 
 						(<span class="glyphicon glyphicon-certificate"></span>)

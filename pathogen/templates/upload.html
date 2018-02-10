@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+<script>
+function validateForm() {
+    var y = document.forms["form1"]["optradio"].value;
+    if (y == "") {
+        alert("Choose a database");
+        return false;
+    }
+    var x = document.forms["form1"]["xlsxfile"].value;
+    if (x == "") {
+        alert("Choose a excel file to upload");
+        return false;
+    }
+}
+</script>
+{% endblock javascript %}
+
+{% block mainbody %}
+<div class="row">
+	<div class="col-md-8 col-md-offset-2" >
+		<form name="form1" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+		    {% csrf_token %}
+		    <br><br>Select a excel file (xls,xlsx) to upload to the database.
+		    <br>
+			<label class="radio-inline"><input type="radio" name="optradio" value="phytoptora">P. Infestans</label>
+			<label class="radio-inline"><input type="radio" name="optradio" value="ralstonia">R. Solanacerum</label>
+			<label class="radio-inline"><input type="radio" name="optradio" value="virome">Virome</label>
+			<br><br>
+		    <input type="file" name="xlsxfile">
+		    <br><br>
+		    <button type="submit">Upload</button>
+		</form>
+
+		  {% if uploaded_file_url %}
+		    <p>File uploaded <!-- <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a> {{ result }} --></p>
+		  {% endif %}
+
+  		<!-- <p><a href="#">Return to home</a></p> -->
+
+	</div>
+</div>
+{% endblock mainbody %}
+

@@ -145,19 +145,55 @@ def flistp(request):
 			context['region'] = data[fid]['attr'][1]
 			context['province'] = data[fid]['attr'][2]
 			context['district'] = data[fid]['attr'][3]
-			context['locality'] = data[fid]['attr'][4]
+			# context['locality'] = data[fid]['attr'][4]
 			context['lat'] = data[fid]['attr'][5]
 			context['lng'] = data[fid]['attr'][6]
 			context['alt'] = data[fid]['attr'][7]
-			context['reference'] = data[fid]['attr'][8]
-			context['img'] = data[fid]['attr'][8]
+			# context['reference'] = data[fid]['attr'][8]
+			# context['img'] = data[fid]['attr'][8]
 			context['sample'] = data[fid]['sampl']
-			print context['sample']
+			# print context['sample']
 		else:
 			context['ERRMSG'] = 'field ID ' + fid + ' is not correct'
 	else:
 		context['ERRMSG'] = 'no field was selected'
 	return render(request, 'flistp.html', context)
+
+def flistv(request):
+	context = {}
+	context.update(settings.GLOBAL_SETTINGS)
+	fid = request.GET.get('fid', '')
+	sid_list = request.GET.get('sid', '')
+	vname = request.GET.get('vname', '')
+	data = loadData.vload_data_samplefield()
+	
+	if sid_list:
+		context['select'] = []
+		context['select'] = sid_list.split(",")
+		context['vname'] = 'unknown virus'
+		if vname:
+			context['vname'] = vname
+	if fid:
+		if fid in data:
+			context['fid'] = fid
+			context['prefix'] = fid[:3]
+			# context['isolateid'] = data[fid]['attr'][0]
+			context['region'] = data[fid]['attr'][1]
+			context['province'] = data[fid]['attr'][2]
+			context['district'] = data[fid]['attr'][3]
+			# context['locality'] = data[fid]['attr'][4]
+			context['lat'] = data[fid]['attr'][5]
+			context['lng'] = data[fid]['attr'][6]
+			context['alt'] = data[fid]['attr'][7]
+			# context['reference'] = data[fid]['attr'][8]
+			# context['img'] = data[fid]['attr'][8]
+			context['sample'] = data[fid]['sampl']
+			# print context['sample']
+		else:
+			context['ERRMSG'] = 'field ID ' + fid + ' is not correct'
+	else:
+		context['ERRMSG'] = 'no field was selected'
+	return render(request, 'flistv.html', context)
 
 def sinfop(request):
 	context = {}
@@ -268,3 +304,16 @@ def list_samplefield(request):
 def plist_samplefield(request):
 	data = loadData.pload_data_samplefield()
 	return JsonResponse(data)
+
+def vlist_samplefield(request):
+	data = loadData.vload_data_samplefield()
+	return JsonResponse(data)
+
+def load_map_all(request):
+	data = loadData.load_map()
+	return JsonResponse(data)
+
+def p_summary(request):
+	data = loadData.p_summary()
+	return JsonResponse(data)
+
