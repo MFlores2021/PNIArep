@@ -177,32 +177,19 @@ def pload_data_samplefield():
 		peppage   = m[27]
 		
 
-		pig11 = m[29]
-		pi02 = m[30]
-		ssr11 = m[31]
-		d13 = m[32]
-		ssr8 = m[33]
-		ssr4 = m[34]
-		pi04 = m[35]
-		pi70 = m[36]
-		ssr6 = m[37]
-		pi63 = m[38]
-		ssr2 = m[39]
-		pi4b = m[40]
-
 		if fid not in data_obj.keys():
 			data_obj[fid] = {}
 			data_obj[fid]['attr'] = [isolateID,department, province, district, locality, latitude, longitude, altitude]
 			data_obj[fid]['samp'] = []
 			data_obj[fid]['sampl'] = []
 			data_obj[fid]['test'] = []
-			data_obj[fid]['test'].append([sampleID, isolateID, fid, matingtype, sdate, shost,  haplotypes, srace  , genotypic , clonal ,  peppage, metalaxyl, sobservation, pig11, pi02, ssr11, d13, ssr8, ssr4, pi04, pi70, ssr6, pi63, ssr2, pi4b, pesticides,fta,nofta ])
+			data_obj[fid]['test'].append([sampleID, isolateID, fid, matingtype, sdate, shost,  haplotypes, srace  , genotypic , clonal ,  peppage, metalaxyl, sobservation ])
 			data_obj[fid]['sampl'].append([sampleID, shost, sdate, srace, genotypic , clonal ])
 			data_obj[fid]['samp'].append([sampleID, isolateID, (isolateID), fid, sdate, shost, svariety, srace, srack, sbox, sgrid, svials, scollector, sdatecollection, sdate,sequenced])
 		else:
 			#data_obj[fid]['samp'] = []
 			#data_obj[fid]['sampl'] = []
-			data_obj[fid]['test'].append([sampleID, isolateID, fid, matingtype, sdate, shost,  haplotypes, srace  , genotypic , clonal ,  peppage, metalaxyl, sobservation, pig11, pi02, ssr11, d13, ssr8, ssr4, pi04, pi70, ssr6, pi63, ssr2, pi4b, pesticides,fta,nofta ])
+			data_obj[fid]['test'].append([sampleID, isolateID, fid, matingtype, sdate, shost,  haplotypes, srace  , genotypic , clonal ,  peppage, metalaxyl, sobservation ])
 			data_obj[fid]['sampl'].append([sampleID, shost, sdate, srace, genotypic , clonal  ])
 			data_obj[fid]['samp'].append([sampleID, isolateID, (isolateID), fid, sdate, shost, svariety, srace, srack, sbox, sgrid, svials, scollector, sdatecollection, sdate,sequenced])
 	

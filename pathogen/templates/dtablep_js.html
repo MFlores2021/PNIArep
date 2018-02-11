@@ -57,11 +57,11 @@ function test_selection(virusList, selectName, selectCID) {
 			var year = geoList[vid]['test'][i][4];
 			var host = geoList[vid]['test'][i][5];
 			var haplotypes = geoList[vid]['test'][i][6];
-			var race = geoList[vid]['test'][i][10];
+			var race = geoList[vid]['test'][i][7];
 			var genotypic = geoList[vid]['test'][i][8];
 			var clonal = geoList[vid]['test'][i][9];
 			var peppage = geoList[vid]['test'][i][10];
-			var metalaxyl = geoList[vid]['test'][i][12];
+			var metalaxyl = geoList[vid]['test'][i][11];
 			var pesticides = geoList[vid]['test'][i][25];
 			var observation = geoList[vid]['test'][i][12];
 			var field = fid.substr(0,3);
@@ -77,13 +77,8 @@ function test_selection(virusList, selectName, selectCID) {
 			// table_html += '<td>' + pesticides  + '</td>\n';
 			table_html += '<td>' + year + '</td>\n';
 			table_html += '<td>' + host + '</td>\n';
-			table_html += '<td>' + matingtype  + '</td>\n';
-			
+			table_html += '<td>' + matingtype  + '</td>\n';			
 			table_html += '<td>' + haplotypes + '</td>\n';
-			// table_html += '<td>' + gpiacetate + '</td>\n';
-			// table_html += '<td>' + gpistarch + '</td>\n';
-			// table_html += '<td>' + pepacetate + '</td>\n';
-			// table_html += '<td>' + peppage + '</td>\n';
 			table_html += '<td>' + metalaxyl + '</td>\n';	
 			table_html += '<td>' + race + '</td>\n';
 			table_html += '<td>' + genotypic + '</td>\n';

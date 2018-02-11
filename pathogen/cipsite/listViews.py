@@ -38,13 +38,13 @@ def upload(request):
     if request.method == 'POST' and request.FILES['xlsxfile']:
     	dbase = ""
     	if 'optradio' in request.POST:
-   			dbase = request.POST['optradio']
+			dbase = request.POST['optradio']
    			
         myfile = request.FILES['xlsxfile']
-        fs = FileSystemStorage(location='./static/data') 
+        fs = FileSystemStorage(location='./files') 
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-        result = scripts.upload_sql_xlsx('./static/data/' + filename,dbase)
+        result = scripts.upload_sql_xlsx('./files/' + filename,dbase)
         return render(request, 'upload.html', {
             'uploaded_file_url': uploaded_file_url
         }, result)
