@@ -9,7 +9,9 @@ def index(request):
     return render(request, "index.html")
 
 def map(request):
-    return render(request, "map.html")
+	context = {}
+	context.update(settings.GLOBAL_SETTINGS)
+	return render(request, "map.html", context)
 
 def tables(request):
     return render(request, "tables.html")

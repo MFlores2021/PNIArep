@@ -33,8 +33,7 @@ var summaryTotal = [];
 function load_data() {
 	$.ajax({
 		//url: '{{ dbURL }}',
-		// url: '/{{ SUB_FDR }}/load_map_all/',
-		url: 'http://localhost:8000/load_map_all/',
+		url: '/{{ SUB_FDR }}/load_map_all/',
 		async: false,
 		dataType: 'json',
 		success: function (data) {

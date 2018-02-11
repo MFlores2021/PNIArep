@@ -62,3 +62,4 @@ def boot(request):
 	context = {}
 	context.update(settings.GLOBAL_SETTINGS)
 	return render(request, 'pages/index.html', context)
+
