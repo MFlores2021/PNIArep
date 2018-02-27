@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+<script src="//cdn.rawgit.com/noelboss/featherlight/1.3.3/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+$(function() {
+    $('a').tooltip();
+})
+</script>
+<style type="text/css">
+	@media all {
+		.lightbox { display: none; }
+	}
+</style>
+
+{% endblock javascript %}
+{% block mainbody %}
+
+<div class="row">
+	<div class="col-md-12">
+	{% if ERRMSG %}
+		<div class="alert alert-dismissable alert-danger">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+			<h4> Alert! </h4> <strong>Warning!</strong> {{ ERRMSG }}.
+		</div>
+	{% endif %}
+
+	<h4 class="page-header" align=center>Sample {{ sid }} analyzing results</h4>
+	<br><div class="panel-group" id="accordion">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+        		<h3 class="panel-title">
+           			Sample Cleaning
+					<span class="pull-right">
+						<a href="ftp://bioinfo.bti.cornell.edu/pub/virome/sweetpotato/{{ sid }}.gz" target="_blank" download><button type="button" class="btn btn-xs btn-default">Download Clean Reads</button></a>
+                    </span>
+				</h3>
+			</div>
+			<table class="table table-striped">
+				<tr>
+					<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Sample ID">sample ID</a></th> 
+					<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Total number of raw reads">Total Reads</th> 
+					<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Number of reads that do not contain the adaptor sequence (unmatch),  reads containing empty adaptors (Null), reads containing undetermined base (N) and reads that are short">Reads to be cleaned</th> 
+					<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Reads cleaned percentage">% to be cleaned</th> 
+					<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Number of final cleaned sRNAs">Final Clean Reads</th> 
+					<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Final cleaned sRNAs percentage">% Final Clean Reads</th>
+				</tr>
+				<tr>
+				<td>{{ sid }}</td> 
+				<td>{{ total }}</td>
+				<td>{{ clean }}</td>
+				<td>{{ cleanP }}</td>
+				<!-- <td>{{ rRNA }}</td>
+				<td>{{ tsnoRNA }}</td> -->
+				<td>{{ final }}</td>
+				<td>{{ finalP }}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<!-- <div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+						Length Distribution
+				</h3>
+			</div>
+			<div class="panel-body">
+				<img class="img-responsive" src="{% static "lendist" %}/{{ sid }}.png">{{ htmlx }}
+			</div>
+		</div>
+	</div>
+</div> -->
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Virus Identified by nucleotide similarity (BLASTN)
+					<span class="pull-right">
+						<a href="#" data-featherlight="#data_interpretation">data interpretation</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<a href="{% static "sample" %}/result_{{ sid }}/contig_sequences.blastn.fa" target="_blank" download><button type="button" class="btn btn-xs btn-default">Download Virus Contigs (BLASTN)</button></a>
+					</span>
+                </h3>
+            </div>
+			{{ html_known_info|safe }}
+		</div>
+	</div>
+
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Virus Identified by translated protein similarity (BLASTX)
+					<span class="pull-right">
+						<a href="#" data-featherlight="#data_interpretation">data interpretation</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<a href="{% static "sample" %}/result_{{ sid }}/contig_sequences.blastx.fa" target="_blank" download><button type="button" class="btn btn-xs btn-default">Download Virus Contigs (BLASTX)</button></a>
+					</span>
+				</h3>
+			</div>
+			{{ html_novel_info|safe }}
+		</div>
+	</div>
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					FastQC
+					<span class="pull-right">
+						<!-- <a href="#" data-featherlight="#data_interpretation">data interpretation</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+						<!-- <a href="{% static "sample" %}/result_{{ sid }}/contig_sequences.blastx.fa" target="_blank" download><button type="button" class="btn btn-xs btn-default">Download Virus Contigs (BLASTX)</button></a> -->
+					</span>
+				</h3>
+			</div>
+			{{ html_fastqc_info|safe }}
+		</div>
+	</div>
+</div></div>
+
+{% endblock mainbody %}
+
+{% block bodyend %}
+<div id="data_interpretation" class="lightbox" >
+	<h4 align=center><b><font color="red">Important notes on interpreting the virus identification results</font></b></h4>
+    <div style="padding: 20px;">
+            This table provides the list of reference sequences from GenBank database to which significant similarity was found in the contigs of the sample. There are several aspects to keep in mind when interpreting these data: <br /><br />
+            <ol>
+                <li>
+                The GenBank database may contain errors and/or outdated nomenclature and therefor results should be verified by checking the reference sequences. <br /><br />
+                </li>
+                <li>
+                    The table provides the minimum, maximum and average sequence identity to the reference sequence and this should be taken into account when interpreting the data. Significant similarity can be achieved with less than 70% sequence identity in which case it may represent a different virus than that listed. Sequence identity criteria for virus species differ between genera (more information <a href="http://www.ictvonline.org/index.asp" target="_blank">http://www.ictvonline.org/index.asp</a>), but generally sequence identity >90% can be considered the same species. The alignment should be further scrutinized if any of the values is below 90%. <a href="#" data-featherlight="#evaluating_alignments">More information about evaluating alignments</a> <br /><br />
+                </li>
+                <li>
+                    Results will change and become more accurate over time as sequence data of newly identified viruses is added to the GenBank database and we will re-run the analysis with the same data. The version of the GenBank virus sequence database used for the current results is v206.0. (<a href="http://www.ncbi.nlm.nih.gov/news/02-17-2015-genbank-206" taget="_blank">http://www.ncbi.nlm.nih.gov/news/02-17-2015-genbank-206/</a>)
+                </li>
+            </ol>
+   </div>
+</div>
+
+<div id="evaluating_alignments" class="lightbox" >
+        <h4><b>About evaluating alignments.</b></h4>
+        <div style="padding: 20px;">
+        <ol>
+            <li>
+            Alignment showing overlapping contigs with differing levels of sequence identity indicate the presence of several differing variants of the same virus. <br /><br />
+            <b>Example</b>: sample GH-S036a (<a href="http://bioinfo.bti.cornell.edu/virome/sinfo?sid=GH-S036a">http://bioinfo.bti.cornell.edu/virome/sinfo?sid=GH-S036a</a>) <br /><br />
+            Contigs with high sequence identity (>95% shown in red) and low sequence identity (70-80% shown in white to pink) are found aligning to the same regions of the reference sequence (blue).<br /><br />
+            <img src="{% static "img/evalign01.png" %}" class="img-responsive"> <br /><br />
+            </li>
+            <li>
+            Alignments showing low level of sequence identity to several different related reference viruses probably indicate a single new virus in the sample. <br /><br />
+            <b>Example</b>: sample AO-S003 (<a href="http://bioinfo.bti.cornell.edu/virome/sinfo?sid=AO-S003">http://bioinfo.bti.cornell.edu/virome/sinfo?sid=AO-S003</a>) <br /><br />
+            Four different potyviruses with significant sequence similarity are identified (indicated in the red box in the figure below) and all of them show very low sequence identity of around 70% to the reference virus sequences. However one potyvirus identified (shown in the green circle in the figure below) has a much higher level of nucleotide identity than the others (>90%), but has the same name (sweet potato feathery mottle virus) as some of the viruses with much lower sequence identity. The reference in GenBank (AF016366) in green is only a partial sequence and has been mis-identified as sweet potato feathery mottle virus. Based on its low sequence identity to sweet potato feathery mottle virus, AF016366 actually represents another virus species, which is probably the same as the one found in this sample (because of the high sequence identity of >90% to this sample). <br /><br />
+            <img src="{% static "img/evalign03.png" %}" width=600> <br /><br />
+            </li>
+            <li>
+            Alignments showing high level of sequence identity to some parts of the reference, but low identify to other parts, probably indicate a recombinant isolate in the sample. <br /><br />
+            <b>Example</b>: sample MW-S082 (<a href="http://bioinfo.bti.cornell.edu/virome/sinfo?sid=MW-S082">http://bioinfo.bti.cornell.edu/virome/sinfo?sid=MW-S082</a>) <br /><br />
+            The about 4.5 kb on the 5’ and 3’ end of the virus (circled in green) show >90% identity to the reference sequence, but around 2 kb in the middle (circled in red) show only around 80% identity. This indicates the central region originates from another variant of the virus and the isolate probably represents a recombinant. <br /><br />
+            <img src="{% static "img/evalign05.png" %}" width=600> <br /><br />
+            </li>
+        </ol>
+        </div>
+</div>
+{% endblock bodyend %}
+
