@@ -4,6 +4,7 @@
 import os, sys
 import os.path
 from django.conf import settings
+from django.db import connection
 
 import MySQLdb
 
@@ -35,7 +36,7 @@ def convert_GPS(gps_unit):
 
 # load data clean
 def load_data_clean():
-	dataCleanFile = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../static/data_clean.txt"
+	dataCleanFile = os.path.abspath(os.path.dirname(__name__)) + "/static/sample/report.txt"
 	dataCleanObj = {}	# data clean obj for store all data clean
 	dh=open(dataCleanFile, "r")
 	for line in dh:
@@ -47,66 +48,42 @@ def load_data_clean():
 		# title
 		# 0		 1      2       3           4          5     6          7       8        9     10    11      12     13   14     15    16   17   18          19
 		# sample rename barcode Data-set-ID Library-ID total 3P-unmatch 3P-null 3P-match baseN short cleaned %clean tRNA snoRNA snRNA chol rRNA final-clean %final-clean 
-		if m[5] < 10000:
-			continue
+		# if m[5] < 10000:
+		# 	continue
 
 		sid = m[0];
-		if len(m[1])>=3:
-			sid = m[1]
 
 		if sid not in dataCleanObj.keys():
 			dataCleanObj[sid] = {}
-			dataCleanObj[sid]['total'] = m[5]
-			dataCleanObj[sid]['clean'] = m[11]
-			dataCleanObj[sid]['cleanP']= m[12]
-			dataCleanObj[sid]['tRNA']  = m[13]
-			dataCleanObj[sid]['snoRNA']= m[14]
-			dataCleanObj[sid]['snRNA'] = m[15]
-			dataCleanObj[sid]['chlo']  = m[16]
-			dataCleanObj[sid]['rRNA']  = m[17]
-			dataCleanObj[sid]['final'] = m[18]
-			dataCleanObj[sid]['finalP']= m[19]
+			dataCleanObj[sid]['total'] = m[1]
+			dataCleanObj[sid]['clean'] = int(m[1])-int(m[7])
+			dataCleanObj[sid]['cleanP']= "%.2f" % round(((float(m[1])-float(m[7]))/float(m[1])*100),2)
+			dataCleanObj[sid]['final'] = m[7]
+			dataCleanObj[sid]['finalP']= "%.2f" % round((float(m[7])/float(m[1])) *100,2)
 
 	return dataCleanObj
 
-def p_summary():
-	db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
-	# prepare a cursor object using cursor() method
-	cursor = db.cursor()
-
-	# execute SQL query using execute() method.
-	cursor.execute("SELECT department,COUNT(*) FROM `phytoptora` GROUP BY department")
-	#cursor.execute("SELECT * from phytoptora")
-	adh = cursor.fetchall()
-
-	# disconnect from server
-	db.close()
-
-	data_obj = {}
-
-	for m in adh:
-		sid = m[0] #.upper()
-		value = m[1]
-		data_obj[sid] = {}
-		data_obj[sid] = value
-
-	return data_obj
 
 #phytoptora
 
 def pload_data_samplefield():
-	db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
-	# prepare a cursor object using cursor() method
-	cursor = db.cursor()
 
-	# execute SQL query using execute() method.
-	cursor.execute("SELECT * from phytoptora")
+	with connection.cursor() as cursor:
+		cursor.execute("SELECT * from phytoptora")
+		adh = cursor.fetchall()
 
-	# Fetch a single row using fetchone() method.
-	adh = cursor.fetchall()
+	# db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
+	# # prepare a cursor object using cursor() method
+	# cursor = db.cursor()
 
-	# disconnect from server
-	db.close()
+	# # execute SQL query using execute() method.
+	# cursor.execute("SELECT * from phytoptora")
+
+	# # Fetch a single row using fetchone() method.
+	# adh = cursor.fetchall()
+
+	# # disconnect from server
+	# db.close()
 
 
 	# set filter set, only load sample dataset which is cleaned 
@@ -201,20 +178,23 @@ def pload_data_samplefield():
 #Ralstonia:
 
 def load_data_samplefield():
-	#datafile = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/data1.txt"
 
-	db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
-	# prepare a cursor object using cursor() method
-	cursor = db.cursor()
+	with connection.cursor() as cursor:
+		cursor.execute("SELECT * from ralstonia")
+		adh = cursor.fetchall()
 
-	# execute SQL query using execute() method.
-	cursor.execute("SELECT * from ralstonia")
+	# db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
+	# # prepare a cursor object using cursor() method
+	# cursor = db.cursor()
 
-	# Fetch a single row using fetchone() method.
-	adh = cursor.fetchall()
+	# # execute SQL query using execute() method.
+	# cursor.execute("SELECT * from ralstonia")
 
-	# disconnect from server
-	db.close()
+	# # Fetch a single row using fetchone() method.
+	# adh = cursor.fetchall()
+
+	# # disconnect from server
+	# db.close()
 
 	# set filter set, only load sample dataset which is cleaned 
 	data_clean_obj = load_data_clean();
@@ -285,18 +265,23 @@ def load_data_samplefield():
 #Virome:
 
 def vload_data_samplefield():
-	db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
-	# prepare a cursor object using cursor() method
-	cursor = db.cursor()
 
-	# execute SQL query using execute() method.
-	cursor.execute("SELECT * from virome")
+	with connection.cursor() as cursor:
+		cursor.execute("SELECT * from virome")
+		adh = cursor.fetchall()
 
-	# Fetch a single row using fetchone() method.
-	adh = cursor.fetchall()
+	# db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
+	# # prepare a cursor object using cursor() method
+	# cursor = db.cursor()
 
-	# disconnect from server
-	db.close()
+	# # execute SQL query using execute() method.
+	# cursor.execute("SELECT * from virome")
+
+	# # Fetch a single row using fetchone() method.
+	# adh = cursor.fetchall()
+
+	# # disconnect from server
+	# db.close()
 
 
 	# set filter set, only load sample dataset which is cleaned 
@@ -385,29 +370,30 @@ def vload_data_samplefield():
 
 
 
-#map
-
+#Data for map
 
 def load_map():
-	#datafile = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/data1.txt"
 
-	db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
+	db = connection 
+
 	# prepare a cursor object using cursor() method
 	cursor = db.cursor()
 	cursor1 = db.cursor()
 	cursorp = db.cursor()
+	cursorv = db.cursor()
 
 	# execute SQL query using execute() method.
 	cursor.execute("SELECT CIPnumber,latitude, longitude, province from ralstonia")
 	cursorp.execute("SELECT CIPnumber,latitude, longitude, province from phytoptora")
-	# cursor1.execute("SELECT department,COUNT(*) FROM `ralstonia` GROUP BY department")
-	# SELECT CIPnumber,latitude, longitude, province from `ralstonia` union SELECT CIPnumber,latitude, longitude, province FROM `phytoptora` 
-	# SELECT department,COUNT(*) FROM `phytoptora` GROUP BY department union SELECT department,COUNT(*) FROM `ralstonia` GROUP BY department
-	cursor1.execute("SELECT department,COUNT(*),'phytoptora' FROM `phytoptora` GROUP BY department union SELECT department,COUNT(*),'ralstonia' FROM `ralstonia` GROUP BY department")
+	cursorv.execute("SELECT CIPnumber,latitude, longitude, province from virome")
+	cursor1.execute("SELECT * FROM (SELECT department,COUNT(*),'phytoptora' FROM `phytoptora` GROUP BY department union SELECT department,COUNT(*),'ralstonia' FROM `ralstonia` GROUP BY department union SELECT department,COUNT(*),'virome' FROM `virome` GROUP BY department) sum")
+
 	# Fetch a single row using fetchone() method.
 	adh = cursor.fetchall()
 	adh1 = cursor1.fetchall()
 	adhp = cursorp.fetchall()
+	adhv = cursorv.fetchall()
+
 	# disconnect from server
 	db.close()
 
@@ -430,13 +416,10 @@ def load_map():
 
 		data_obj["ral"] [CIPnumber] = {}
 		data_obj["ral"] [CIPnumber]['attr'] = [latitude, longitude, province]
-		# else:
-		# 	data_obj[fid]['test'].append([sampleID, fid, biovar, phylotype, sequevar, ncbi_acc])
-		# 	data_obj[fid]['samp'].append([sampleID, fid, sdate, shost, sequenced])
+
 
 	data_obj["phy"] = {}
 	for m in adhp:
-
 		province = m[3]
 		latitude = m[1]
 		longitude = m[2]
@@ -447,9 +430,22 @@ def load_map():
 		data_obj["phy"] [CIPnumber]['attr'] = [latitude, longitude, province]
 
 
+	data_obj["vir"] = {}
+	for m in adhv:
+		province = m[3]
+		latitude = m[1]
+		longitude = m[2]
+		CIPnumber = m[0]
+		# if fid not in data_obj.keys():
+
+		data_obj["vir"] [CIPnumber] = {}
+		data_obj["vir"] [CIPnumber]['attr'] = [latitude, longitude, province]
+
+
 	data_obj["sum"] = {}
 	data_obj["sum"]["ralstonia"] = {}
 	data_obj["sum"]["phytoptora"] = {}
+	data_obj["sum"]["virome"] = {}
 
 	for m in adh1:
 		sid = m[0] #.upper()
@@ -462,3 +458,99 @@ def load_map():
 
 	return data_obj
 	
+# Phytoptora data for admin:
+
+def hpload_data_samplefield():
+
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * from phytoptora")
+        adh = cursor.fetchall()
+
+	# set filter set, only load sample dataset which is cleaned 
+	data_clean_obj = load_data_clean();
+
+	# main for load data
+	data_obj = {}       # data object for store all data
+	sample_uniq = {}    # dict for check the sample uniq
+	
+	for m in adh:
+
+		# attribute for sample
+		sampleID = m[5]
+		isolateID = m[2]
+		prefix = sampleID[0:2]
+		fta = m[3]
+		nofta = m[4]
+		shost = m[7]  #host
+		svariety = m[6]  #variety
+		srace = m[19]
+		srack = m[42]
+		sbox = m[43]
+		sgrid = m[44]
+		svials = m[45]
+		scollector = m[20]
+		sdatecollection = m[21]
+		sdate = m[6]
+		syear = sdate
+		sobservation = m[28]
+
+		# if sampleID in sample_uniq.keys():
+		# 	sys.stderr.write('[ERR]dup sample ID ', sampleID, "\n")
+		# else:
+		sample_uniq[sampleID] = 1
+
+		sequenced = 0
+		if sampleID in data_clean_obj:
+			sequenced = 1
+		
+		# attribute for field
+		department = m[8]
+		province = m[9]
+		district = m[10]
+		latitude = m[13]
+		longitude = m[14]
+		altitude      = m[15]
+
+		locality = m[6]
+		fid = (m[8].replace(" ", "")+m[9].replace(" ", "")+m[10].replace(" ", "")) 
+
+		#test
+		pesticides = m[15]
+		matingtype  = m[16]
+		rflp  = m[22]
+		aflp  = m[23]
+		haplotypes  = m[17]
+		metalaxyl  = m[18]
+		genotypic  = m[20]
+		clonal  = m[21]
+		pepacetate  = m[26]
+		peppage   = m[27]
+		PERcode	   = m[1]
+		isolate	   = m[2]
+		fta	   	   = m[3]
+		tmpcode	   = m[4]
+		dateintro  = m[22]
+		rack	   = m[23]
+		box	  	   = m[24]
+		grid	   = m[25]
+		vials	   = m[26]
+
+		if fid not in data_obj.keys():
+			data_obj[fid] = {}
+			data_obj[fid]['attr'] = [isolateID,department, province, district, locality, latitude, longitude, altitude]
+			data_obj[fid]['samp'] = []
+			data_obj[fid]['sampl'] = []
+			data_obj[fid]['test'] = []
+			data_obj[fid]['test'].append([sampleID, isolateID, fid, matingtype, sdate, shost,  haplotypes, srace  , genotypic , clonal ,  peppage, metalaxyl, PERcode ,isolate, fta ,tmpcode, dateintro, rack,box, grid, vials])
+			data_obj[fid]['sampl'].append([sampleID, shost, sdate, srace, genotypic , clonal ])
+			# data_obj[fid]['samp'].append([sampleID, isolateID, (isolateID), fid, sdate, shost, svariety, srace, srack, sbox, sgrid, svials, scollector, sdatecollection, sdate,sequenced])
+		else:
+			#data_obj[fid]['samp'] = []
+			#data_obj[fid]['sampl'] = []
+			data_obj[fid]['test'].append([sampleID, isolateID, fid, matingtype, sdate, shost,  haplotypes, srace  , genotypic , clonal ,  peppage, metalaxyl, PERcode, isolate,	fta, tmpcode, dateintro, rack, box,grid, vials ])
+			data_obj[fid]['sampl'].append([sampleID, shost, sdate, srace, genotypic , clonal  ])
+			# data_obj[fid]['samp'].append([sampleID, isolateID, (isolateID), fid, sdate, shost, svariety, srace, srack, sbox, sgrid, svials, scollector, sdatecollection, sdate,sequenced])
+	
+	#db.close()
+
+	return data_obj

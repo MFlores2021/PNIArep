@@ -265,14 +265,107 @@ def sinfop(request):
 		context['ERRMSG'] = 'no sample was selected'
 	return render(request, 'sinfop.html', context)
 
+def sinfov(request):
+	context = {}
+	context.update(settings.GLOBAL_SETTINGS)
+	sid = request.GET.get('sid', '')
+	if sid:
+		context['sid'] = sid
+		# parse known html and import it to virome page
+		html_known = os.path.abspath(os.path.dirname(__name__)) + "/static/sample/result_" + sid + "/blastn.html"
+		html_known_info = ""
+		if os.path.exists(html_known):
+			dh = open(html_known, "r")
+			for i in range(6):
+				next(dh)
+			for line in dh:
+				line = re.sub(r'width: 780px;', "", line)
+				#line = re.sub(r'table-bordered', "table-striped", line)
+				matchObj = re.search( r'blastn_references/(.*)\.html', line) # convet the link
+				if matchObj:
+					link = "/sctg?vtp=blastn&sid=" + sid + "&vid=" + matchObj.group(1)
+					line = re.sub(r'blastn_references/.*html', link, line)
+				html_known_info = html_known_info + line + "\n"
+		else:
+			html_info = "None of virus was identified by nucleotide similarity (BLASTN)"
+
+		context['html_known'] = html_known
+		context['html_known_info'] = html_known_info
+
+		# parse novel html and import it to virome page
+		html_novel = os.path.abspath(os.path.dirname(__name__)) + "/static/sample/result_" + sid + "/blastx.html"
+		html_novel_info = ""
+		if os.path.exists(html_novel):
+			dh = open(html_novel, "r")
+			for i in range(6):
+				next(dh)
+			for line in dh:
+				line = re.sub(r'width: 780px;', "", line)
+				#line = re.sub(r'table-bordered', "table-striped", line)
+				matchObj = re.search( r'blastx_references/(.*)\.html', line) # convet the link
+				if matchObj:
+					link = "/sctg?vtp=blastx&sid=" + sid + "&vid=" + matchObj.group(1)
+					line = re.sub(r'blastx_references/.*html', link, line)
+				html_novel_info = html_novel_info + line + "\n"
+		else:
+			html_novel_info = "None of virus was identified by translated protein similarity (BLASTX)"
+
+		context['html_novel'] = html_novel
+		context['html_novel_info'] = html_novel_info
+
+		# parse FastQC
+		html_fastqc = os.path.abspath(os.path.dirname(__name__)) + "/static/sample/result_" + sid + "/fqc." + sid  + ".html"
+		html_fastqc_info = ""
+		if os.path.exists(html_fastqc):
+			dh = open(html_fastqc, "r")
+			for i in range(6):
+				next(dh)
+			for line in dh:
+				line = re.sub(r'width: 780px;', "", line)
+				#line = re.sub(r'table-bordered', "table-striped", line)
+				matchObj = re.search( r'blastx_references/(.*)\.html', line) # convet the link
+				if matchObj:
+					link = "/sctg?vtp=blastx&sid=" + sid + "&vid=" + matchObj.group(1)
+					line = re.sub(r'blastx_references/.*html', link, line)
+				html_fastqc_info = html_fastqc_info + line + "\n"
+		else:
+			html_fastqc_info = "None of virus was identified by translated protein similarity (BLASTX)"
+
+		context['html_fastqc'] = html_fastqc
+		context['html_fastqc_info'] = html_fastqc_info
+
+
+		# get sample clean information 
+		context['total']   = 'NA'
+		context['clean']   = 'NA'
+		context['cleanP']  = 'NA'
+		# context['rRNA']    = 'NA'
+		# context['tsnoRNA'] = 'NA'
+		context['final']   = 'NA'
+		context['finalP']  = 'NA'
+
+		data_clean = loadData.load_data_clean()
+
+		if sid in data_clean:
+			context['total']   = data_clean[sid]['total']
+			context['clean']   = data_clean[sid]['clean']
+			context['cleanP']  = data_clean[sid]['cleanP']
+			# context['rRNA']    = str(data_clean[sid]['chlo']) + '/' + str(data_clean[sid]['rRNA'])
+			# context['tsnoRNA'] = str(data_clean[sid]['tRNA']) + '/' + str(data_clean[sid]['snoRNA']) + '/' + str(data_clean[sid]['snRNA'])
+			context['final']   = data_clean[sid]['final']
+			context['finalP']  = data_clean[sid]['finalP']
+	else:
+		context['ERRMSG'] = 'no sample was selected'
+	return render(request, 'sinfov.html', context)
+
 def sctg(request):
 	context = {}
 	context.update(settings.GLOBAL_SETTINGS)
 	sid = request.GET.get('sid', '')
 	vid = request.GET.get('vid', '')
-	vtp = request.GET.get('vtp', '')
+	vtp = request.GET.get('vtp', '') 
 	if sid and vid and vtp:
-		html = os.path.abspath(os.path.dirname(os.path.realpath(__file__))) + "/../../static/sample/result_" + sid + "/" + vtp + "_references/" + vid + ".html"
+		html = os.path.abspath(os.path.dirname(__name__)) + "/static/sample/result_" + sid + "/" + vtp + "_references/" + vid + ".html"
 		html_info = ""
 		dh = open(html, "r")
 		for i in range(5):
@@ -303,6 +396,10 @@ def list_samplefield(request):
 
 def plist_samplefield(request):
 	data = loadData.pload_data_samplefield()
+	return JsonResponse(data)
+
+def hplist_samplefield(request):
+	data = loadData.hpload_data_samplefield()
 	return JsonResponse(data)
 
 def vlist_samplefield(request):

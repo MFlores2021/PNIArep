@@ -40,8 +40,9 @@ function load_data() {
 			geoList = data.ral;
 			summary = data.sum;
 			phytoList = data.phy;
-			virussList = ""; //data.phy;
+			virussList = data.vir;
 			summaryTotal = mergeJson(data.sum.phytoptora, data.sum.ralstonia);
+			summaryTotal = mergeJson(summaryTotal, data.sum.virome);
 		}
 	});
 
@@ -117,6 +118,14 @@ $(function() {
 			} 
 		}
 
+		var contVir =0;
+		var sum = ''
+		for (var sum in summary.virome) {
+			if ( sum === depname ) {
+			 	contVir =summary.virome[sum];
+			} 
+		}
+
 		var contTotal =0;
 		var sum = ''
 		for (var sum in summaryTotal) {
@@ -126,7 +135,7 @@ $(function() {
 		}
 
 		this._div.innerHTML = '' +  (props ?
-			'<h4><b>' + props.name + '</b></h4>' + contPhyto + ' muestras de P. infestans <br />' + contRalstonia + ' muestras de R. solanacearum <br /><br>' + contTotal + ' Total de muestras'
+			'<h4><b>' + props.name + '</b></h4>' + contPhyto + ' muestras de P. infestans <br />' + contRalstonia + ' muestras de R. solanacearum <br />'+ contVir + ' muestras de viroma <br><br />' + contTotal + ' Total de muestras'
 			: 'Hover over a department');
 	};
 

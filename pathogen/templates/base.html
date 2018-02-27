@@ -63,7 +63,6 @@
 <body>
 
     <div id="wrapper">
-
         <!-- Navigation -->
         {% block menu %}
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -87,19 +86,19 @@
                         <li>
                             <a href="map.html"><i class="fa fa-dashboard fa-fw"></i> Map</a>
                         </li>
-                        <li>
+<!--                         <li>
                             <a href="#"><i class="fa fa-files-o fa-fw"></i> Nosotros<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-<!--                                 <li>
+                                <li>
                                     <a href="participant.html">Participantes</a>
-                                </li> -->
+                                </li>
                                 <li>
                                     <a href="publication.html">Publicaciones</a>
                                 </li>
                                 
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
+                            </ul> -->
+                            <!-- /.nav-second-level
+                        </li> -->
                         <li>
                             <a href="#"><i class="fa fa-files-o fa-fw"></i> <i>R. solanacearum</i><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -151,6 +150,14 @@
                                 <li>
                                     <a href="upload.html">Upload data</a>
                                 </li>
+                            </ul>
+                            <ul class="nav nav-second-level">
+                                {% if user.is_authenticated %}
+                                    <!--  <li>User: {{ user.get_username }}</li> -->
+                                     <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
+                                   {% else %}
+                                     <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>   
+                                   {% endif %} 
                             </ul>
                         </li>
                        <li>

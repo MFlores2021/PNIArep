@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-#from cipsite import static
+from django.contrib.auth import views as auth_views
+
 from cipsite import pageDisplay 
 from cipsite import listViews
 
@@ -36,20 +37,26 @@ urlpatterns = [
     url(r'^dmapr',listViews.dmapr),         
     url(r'^downloadp',listViews.downloadp),
     url(r'^dtablep',listViews.dtablep),   
+    url(r'^dtablehp',listViews.dtablehp), 
     url(r'^dtablev',listViews.dtablev),  
     url(r'^dmapp',listViews.dmapp),  
     url(r'^map',listViews.map),  
     url(r'^admin/', admin.site.urls),
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
 
     url(r'^list_samplefield', pageDisplay.list_samplefield),
     url(r'^plist_samplefield', pageDisplay.plist_samplefield),
+    url(r'^hplist_samplefield', pageDisplay.hplist_samplefield),
     url(r'^vlist_samplefield', pageDisplay.vlist_samplefield),
     url(r'^load_map', pageDisplay.load_map_all),
     url(r'^p_summary', pageDisplay.p_summary),    
     url(r'^flist', pageDisplay.flist),
     url(r'^sinfo', pageDisplay.sinfo),
+    url(r'^psinfo', pageDisplay.sinfop),
+    url(r'^vsinfo', pageDisplay.sinfov),
     url(r'^pflist', pageDisplay.flistp),
     url(r'^vflist', pageDisplay.flistv),
-    url(r'^psinfo', pageDisplay.sinfop),
+    url(r'^sctg',  pageDisplay.sctg),
     url(r'^upload', listViews.upload),
 ]
