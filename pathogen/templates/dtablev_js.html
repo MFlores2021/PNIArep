@@ -1,3 +1,5 @@
+<link href="//cdn.rawgit.com/noelboss/featherlight/1.7.12/release/featherlight.min.css" type="text/css" rel="stylesheet" />
+<script src="//cdn.rawgit.com/noelboss/featherlight/1.3.3/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 <script>
 var geoList = {};
 var geoListF = {};
@@ -68,9 +70,9 @@ function test_selection(virusList, selectName, selectCID) {
 			table_html += '<td>' + geoList[vid]['test'][i][7] + '</td>\n';
 			table_html += '<td>' + geoList[vid]['test'][i][8] + '</td>\n';
 			table_html += '<td>' + geoList[vid]['test'][i][9] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][10] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][11] + '</td>\n';
-			table_html += '<td>' + geoList[vid]['test'][i][12] + '</td>\n';
+			table_html += "<td><a href=# data-featherlight=\"/static/sample/result_" + sid + "/" + geoList[vid]["test"][i][10] + "\">" + 'Ver</a></td>\n';
+			table_html += "<td><a href=# data-featherlight=\"/static/sample/result_" + sid + "/" + geoList[vid]["test"][i][11] + "\">" + 'Ver</a></td>\n';
+			table_html += "<td><a href=# data-featherlight=\"/static/sample/result_" + sid + "/" + geoList[vid]["test"][i][12] + "\">" + 'Ver</a></td>\n';
 			table_html += '<td>' + geoList[vid]['test'][i][13] + '</td>\n';
 			table_html += '<td>' + geoList[vid]['test'][i][14] + '</td>\n';
 			table_html += '<td>' + geoList[vid]['test'][i][15] + '</td>\n';
@@ -174,7 +176,6 @@ function sample_selection(geoList, cid) {
 	}
 	return table_array;
 }
-
 
 
 

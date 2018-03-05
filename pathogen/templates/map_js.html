@@ -11,8 +11,8 @@
 			margin: 0;
 		}
 		#map {
-			width: 800px;
-			height: 600px;
+			width: 100%;
+			height: 500px;
 		}
 		.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
 		.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }</style>
@@ -68,7 +68,6 @@ function load_data_coord() {
 		//url: '{{ dbURL }}',
 		//url: '/{{ URL }}/static/data/peru_departamental.js',
 		url: 'static/data/peru_departamental.js',
-		//url: 'https://raw.githubusercontent.com/juaneladio/peru-geojson/master/peru_departamental_simple.geojson',
 		async: false,
 		dataType: 'json',
 		success: function (data) {
@@ -175,27 +174,25 @@ $(function() {
 
 	for (var vid in virusList) {
 		if (virusList[vid]['attr'][0] != null && virusList[vid]['attr'][0] != null && virusList[vid]['attr'][0] != 'Unknown' && virusList[vid]['attr'][0] != 'Unknown' && virusList[vid]['attr'][0] != 'NA'){
-			// console.log(virusList[vid]['attr']);
-			var marker = L.marker([virusList[vid]['attr'][0],virusList[vid]['attr'][1]]).bindPopup(virusList[vid]['attr'][2]); //.addTo(cities);
-			marker.bindPopup(virusList[vid]['attr'][2]);
+			var marker = L.marker([virusList[vid]['attr'][0],virusList[vid]['attr'][1]]).bindPopup("ver " +virusList[vid]['attr'][2]); //.addTo(cities);
+			marker.bindPopup("<i>R. solanacearum</i><br>Province: " +virusList[vid]['attr'][2] + "<br>District: " +virusList[vid]['attr'][3] + "<br>Field: <a href=flist?fid=" + virusList[vid]['attr'][4] +">Ver</a>");
 			markers.addLayer(marker);
-		}
+		} 
 	}
 
 	for (var vid in phytoList) {
 		if (phytoList[vid]['attr'][0] != null && phytoList[vid]['attr'][0] != null && phytoList[vid]['attr'][0] != 'Unknown' && phytoList[vid]['attr'][0] != 'Unknown' && phytoList[vid]['attr'][0] != 'NA'){
-			// console.log(virusList[vid]['attr']);
-			var marker = L.marker([phytoList[vid]['attr'][0],phytoList[vid]['attr'][1]]).bindPopup(phytoList[vid]['attr'][2]); //.addTo(cities);
-			marker.bindPopup(phytoList[vid]['attr'][2]);
+			var marker = L.marker([phytoList[vid]['attr'][0],phytoList[vid]['attr'][1]]).bindPopup("ver " +phytoList[vid]['attr'][2]); //.addTo(cities);
+			marker.bindPopup("<i>P. infestans</i><br>Province: " +phytoList[vid]['attr'][2] + "<br>District: " +phytoList[vid]['attr'][3] + "<br>Field: <a href=pflist?fid=" + phytoList[vid]['attr'][4]+">Ver</a>");
 			markers2.addLayer(marker);
 		}
 	}
 
+	//For virome
 	for (var vid in virussList) {
 		if (virussList[vid]['attr'][0] != null && virussList[vid]['attr'][0] != null && virussList[vid]['attr'][0] != 'Unknown' && virussList[vid]['attr'][0] != 'Unknown' && virussList[vid]['attr'][0] != 'NA'){
-			// console.log(virusList[vid]['attr']);
 			var marker = L.marker([virussList[vid]['attr'][0],virussList[vid]['attr'][1]]).bindPopup(virussList[vid]['attr'][2]); //.addTo(cities);
-			marker.bindPopup(virussList[vid]['attr'][2]);
+			marker.bindPopup("Virome<br>Province: " +virussList[vid]['attr'][2] + "<br>District: " +virussList[vid]['attr'][3] + "<br>Field: <a href=vflist?fid=" + virussList[vid]['attr'][4]+">Ver</a>");
 			markersv.addLayer(marker);
 		}
 	}

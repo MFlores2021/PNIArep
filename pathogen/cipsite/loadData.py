@@ -383,9 +383,9 @@ def load_map():
 	cursorv = db.cursor()
 
 	# execute SQL query using execute() method.
-	cursor.execute("SELECT CIPnumber,latitude, longitude, province from ralstonia")
-	cursorp.execute("SELECT CIPnumber,latitude, longitude, province from phytoptora")
-	cursorv.execute("SELECT CIPnumber,latitude, longitude, province from virome")
+	cursor.execute("SELECT CIPnumber,latitude, longitude, province, district, department from ralstonia")
+	cursorp.execute("SELECT CIPnumber,latitude, longitude, province, district, department from phytoptora")
+	cursorv.execute("SELECT CIPnumber,latitude, longitude, province, district, department from virome")
 	cursor1.execute("SELECT * FROM (SELECT department,COUNT(*),'phytoptora' FROM `phytoptora` GROUP BY department union SELECT department,COUNT(*),'ralstonia' FROM `ralstonia` GROUP BY department union SELECT department,COUNT(*),'virome' FROM `virome` GROUP BY department) sum")
 
 	# Fetch a single row using fetchone() method.
@@ -412,10 +412,13 @@ def load_map():
 		latitude = m[1]
 		longitude = m[2]
 		CIPnumber = m[0]
+		district = m[4]
+		department = m[5]
+		fid = (m[5].replace(" ", "")+m[3].replace(" ", "")+m[4].replace(" ", "")) 
 		# if fid not in data_obj.keys():
 
 		data_obj["ral"] [CIPnumber] = {}
-		data_obj["ral"] [CIPnumber]['attr'] = [latitude, longitude, province]
+		data_obj["ral"] [CIPnumber]['attr'] = [latitude, longitude, province, district, fid]
 
 
 	data_obj["phy"] = {}
@@ -424,10 +427,14 @@ def load_map():
 		latitude = m[1]
 		longitude = m[2]
 		CIPnumber = m[0]
+		district = m[4]
+		department = m[5]
+		fid = (m[5].replace(" ", "")+m[3].replace(" ", "")+m[4].replace(" ", "")) 
+
 		# if fid not in data_obj.keys():
 
 		data_obj["phy"] [CIPnumber] = {}
-		data_obj["phy"] [CIPnumber]['attr'] = [latitude, longitude, province]
+		data_obj["phy"] [CIPnumber]['attr'] = [latitude, longitude, province, district, fid]
 
 
 	data_obj["vir"] = {}
@@ -436,10 +443,13 @@ def load_map():
 		latitude = m[1]
 		longitude = m[2]
 		CIPnumber = m[0]
+		district = m[4]
+		department = m[5]
+		fid = (m[5].replace(" ", "")+m[3].replace(" ", "")+m[4].replace(" ", "")) 
 		# if fid not in data_obj.keys():
 
 		data_obj["vir"] [CIPnumber] = {}
-		data_obj["vir"] [CIPnumber]['attr'] = [latitude, longitude, province]
+		data_obj["vir"] [CIPnumber]['attr'] = [latitude, longitude, province, district, fid] 
 
 
 	data_obj["sum"] = {}

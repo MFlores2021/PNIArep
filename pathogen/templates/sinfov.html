@@ -12,6 +12,16 @@ $(function() {
 	@media all {
 		.lightbox { display: none; }
 	}
+	.panel-heading a:after {
+    font-family:'Glyphicons Halflings';
+    content:"\e114";
+    float: right;
+    color: grey;
+	}
+	.panel-heading a.collapsed:after {
+	    content:"\e080";
+	}
+
 </style>
 
 {% endblock javascript %}
@@ -28,35 +38,38 @@ $(function() {
 
 	<h4 class="page-header" align=center>Sample {{ sid }} analyzing results</h4>
 	<br><div class="panel-group" id="accordion">
-		<div class="panel panel-default">
+		<div class="panel panel-default" id="panel1">
 			<div class="panel-heading">
         		<h3 class="panel-title">
-           			Sample Cleaning
-					<span class="pull-right">
-						<a href="ftp://bioinfo.bti.cornell.edu/pub/virome/sweetpotato/{{ sid }}.gz" target="_blank" download><button type="button" class="btn btn-xs btn-default">Download Clean Reads</button></a>
-                    </span>
+        		 <a data-toggle="collapse" data-target="#Sample" href="#Sample">
+           			Sample Cleaning </a>					
 				</h3>
 			</div>
-			<table class="table table-striped">
-				<tr>
-					<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Sample ID">sample ID</a></th> 
-					<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Total number of raw reads">Total Reads</th> 
-					<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Number of reads that do not contain the adaptor sequence (unmatch),  reads containing empty adaptors (Null), reads containing undetermined base (N) and reads that are short">Reads to be cleaned</th> 
-					<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Reads cleaned percentage">% to be cleaned</th> 
-					<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Number of final cleaned sRNAs">Final Clean Reads</th> 
-					<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Final cleaned sRNAs percentage">% Final Clean Reads</th>
-				</tr>
-				<tr>
-				<td>{{ sid }}</td> 
-				<td>{{ total }}</td>
-				<td>{{ clean }}</td>
-				<td>{{ cleanP }}</td>
-				<!-- <td>{{ rRNA }}</td>
-				<td>{{ tsnoRNA }}</td> -->
-				<td>{{ final }}</td>
-				<td>{{ finalP }}</td>
-				</tr>
-			</table>
+			<div id="Sample" class="panel-collapse collapse in">
+	            <div class="panel-body">
+	            	<span class="pull-right">
+						<a href="ftp://bioinfo.bti.cornell.edu/pub/virome/sweetpotato/{{ sid }}.gz" target="_blank" download><button type="button" class="btn btn-xs btn-default">Download Clean Reads</button></a>
+                    </span>
+					<table class="table table-bordered table-striped table-condensed">
+						<tr>
+							<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Sample ID">sample ID</a></th> 
+							<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Total number of raw reads">Total Reads</th> 
+							<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Number of reads that do not contain the adaptor sequence (unmatch),  reads containing empty adaptors (Null), reads containing undetermined base (N) and reads that are short">Reads to be cleaned</th> 
+							<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Reads cleaned percentage">% to be cleaned</th> 
+							<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Number of final cleaned sRNAs">Final Clean Reads</th> 
+							<th><a title="" data-placement="top" data-toggle="tooltip" data-original-title="Final cleaned sRNAs percentage">% Final Clean Reads</th>
+						</tr>
+						<tr>
+							<td>{{ sid }}</td> 
+							<td>{{ total }}</td>
+							<td>{{ clean }}</td>
+							<td>{{ cleanP }}</td>
+							<td>{{ final }}</td>
+							<td>{{ finalP }}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -78,17 +91,22 @@ $(function() {
 
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-default">
+        <div class="panel panel-default" id="panel2">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    Virus Identified by nucleotide similarity (BLASTN)
-					<span class="pull-right">
+                	<a data-toggle="collapse" data-target="#BLASTN" href="#BLASTN">
+                    Virus Identified by nucleotide similarity (BLASTN)  </a>					
+                </h3>
+            </div>
+            <div id="BLASTN" class="panel-collapse collapse in">
+	            <div class="panel-body">
+	            	<span class="pull-right">
 						<a href="#" data-featherlight="#data_interpretation">data interpretation</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<a href="{% static "sample" %}/result_{{ sid }}/contig_sequences.blastn.fa" target="_blank" download><button type="button" class="btn btn-xs btn-default">Download Virus Contigs (BLASTN)</button></a>
 					</span>
-                </h3>
-            </div>
 			{{ html_known_info|safe }}
+			</div>
+		</div>
 		</div>
 	</div>
 
@@ -96,28 +114,38 @@ $(function() {
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">
-					Virus Identified by translated protein similarity (BLASTX)
-					<span class="pull-right">
+					<a data-toggle="collapse" data-target="#BLASTX" href="#BLASTX">
+					Virus Identified by translated protein similarity (BLASTX) </a>
+				</h3>
+			</div>
+			<div id="BLASTX" class="panel-collapse collapse in">
+	            <div class="panel-body">
+	            	<span class="pull-right">
 						<a href="#" data-featherlight="#data_interpretation">data interpretation</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<a href="{% static "sample" %}/result_{{ sid }}/contig_sequences.blastx.fa" target="_blank" download><button type="button" class="btn btn-xs btn-default">Download Virus Contigs (BLASTX)</button></a>
 					</span>
-				</h3>
-			</div>
 			{{ html_novel_info|safe }}
+			</div>
+		</div>
 		</div>
 	</div>
 	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">
-					FastQC
+					<a data-toggle="collapse" data-target="#fastqc" href="#fastqc">
+					FastQC </a>
 					<span class="pull-right">
 						<!-- <a href="#" data-featherlight="#data_interpretation">data interpretation</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
 						<!-- <a href="{% static "sample" %}/result_{{ sid }}/contig_sequences.blastx.fa" target="_blank" download><button type="button" class="btn btn-xs btn-default">Download Virus Contigs (BLASTX)</button></a> -->
 					</span>
 				</h3>
 			</div>
+			<div id="fastqc" class="panel-collapse collapse in">
+	            <div class="panel-body">
 			{{ html_fastqc_info|safe }}
+			</div>
+		</div>
 		</div>
 	</div>
 </div></div>

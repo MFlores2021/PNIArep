@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.conf.urls import handler404, handler500
 
 from cipsite import pageDisplay 
 from cipsite import listViews
@@ -23,7 +24,6 @@ from cipsite import listViews
 from . import views
 
 urlpatterns = [
-#   url(r'^$',views.index),
     url(r'^$',listViews.index),
     url(r'^index',listViews.index),
     url(r'^tables',listViews.tables),
@@ -60,3 +60,7 @@ urlpatterns = [
     url(r'^sctg',  pageDisplay.sctg),
     url(r'^upload', listViews.upload),
 ]
+
+handler404 = 'listViews.error_404'
+handler500 = 'listViews.error_500'
+

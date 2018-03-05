@@ -6,6 +6,14 @@ from django.contrib.auth.decorators import login_required
 import loadData
 import scripts
 
+def error_404(request):
+        data = {}
+        return render(request,'404.html', data)
+ 
+def error_500(request):
+        data = {}
+        return render(request,'500.html', data)
+
 def index(request):
     return render(request, "index.html")
 

@@ -25,7 +25,7 @@ SECRET_KEY = 'wp+_g_ws^79p9e2o0z1w4u%$dnvl9+7(kh=cle&l^9wq6fjr&g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -121,7 +121,7 @@ USE_TZ = True
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 STATIC_URL = '/static/'
-
+LOGIN_REDIRECT_URL = '/'
 # GLOBA_SETTINGS 
 GLOBAL_SETTINGS = {
     'SUB_FDR': '.',
