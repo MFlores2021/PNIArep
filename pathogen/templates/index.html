@@ -1,6 +1,13 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
+<style type="text/css">
+  .stroke {
+    -webkit-text-fill-color:yellow;
+    -webkit-text-stroke: 1px black;
+    -font-size: 20px;
+  }
+</style>
 
   <head>
 
@@ -9,7 +16,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>PNIA</title>
+    <title>Pathogens</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{% static 'bootag/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -96,14 +103,17 @@
             <li class="list-inline-item">
               <a href="dtablev.html"  class="btn btn-secondary btn-lg">
                 <i class="fa fa-leaf fa-fw"></i>
-                <span class="network-name"><i>Viroma</i></span>
+                <span class="network-name"><i>Virome</i></span>
               </a>
             </li>
           </ul>
           <hr class="intro-divider">
-          <h3>PNIA - CIP</h3>
-          <h2>Caracterización de poblaciones de los </h2>
-          <h2>principales patógenos y viroma de la papa en Perú</h2>
+          <br><br>
+          <h3 class="stroke" >CIP - PNIA</h3>
+          <h2 class="stroke" >Database of the main pathogens detected, identified</h2>
+          <h2 class="stroke" >and characterized in the potato crop in Peru</h2>
+<!--           <h2>Characterization of populations</h2>
+          <h2>of the main potato pathogens in Peru</h2> -->
           
         </div>
       </div>
@@ -117,10 +127,8 @@
           <div class="col-lg-10 ml-auto">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
-            <h2 class="section-heading">Proyecto</h2>
             <p class="lead">
-            < Descripcion general>
-            Caracterización de poblaciones de <i>Phytophythora infestans</i> y <i>Ralstonia solanacearum</i> en tres regiones agroecológicas del Perú y fortalecimiento de las capacidades del INIA para el monitoreo continuo de los principales patógenos de la papa
+            <i>Phytophythora infestans</i> and <i>Ralstonia solanacearum</i> affect numerous crops of economic importance worldwide. In Peru, these pathogens are the main phytosanitary problems associated with potato. On the other hand, viruses affect potato crops, so the results generated in the detection of these viruses will allow to better understand the diversity of viruses.
             </p>
           </div>
           <!-- <div class="col-lg-5 mr-auto">
@@ -140,15 +148,15 @@
           <div class="col-lg-5 mr-auto order-lg-2">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
-            <h2 class="section-heading">Phytophthora infestans</h2>
+            <h2 class="section-heading"><i>Phytophthora infestans</i></h2>
             <p class="lead">
-					   < Descripcion >
+             Late blight (Tizón tardio TT) caused by <i>P. infestans</i> is the most destructive potato disease in the world and is consider a very strong plant disease.
              <br>
-             < Link>
+             <a href="pabout.html">See more</a>
 			</p>
           </div>
           <div class="col-lg-5 ml-auto order-lg-1">
-            <img class="img-fluid" src="{% static 'bootag/img/phyto.png' %}" alt="">
+            <img class="img-fluid" src="{% static 'images/phyto.png' %}" alt="">
           </div>
         </div>
 
@@ -166,15 +174,17 @@
           <div class="col-lg-5 ml-auto">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
-            <h2 class="section-heading">Viroma</h2>
+            <h2 class="section-heading">Virome</h2>
             <p class="lead">
-             < Descripcion >
-              <br>
-             < Link>
+            Detection and identification of known or unknown viruses allows us to better understand the diversity and distribution of viruses and their correlation with potato production in Peru.
+             <br>
+             <!-- <a href="vabout.html">See more</a> -->
+             <a href="{% static 'papers/Viroma_de_la_Papa.pdf' %}" target=_blank>See more</a><br>
+             <a href="dtablev.html">See data</a>
 			</p>
           </div>
           <div class="col-lg-5 mr-auto ">
-         	 <img class="rounded mx-auto d-block img-fluid" src="{% static 'images/tallerpnia.png' %}" alt="">
+         	 <img class="rounded mx-auto d-block img-fluid" src="{% static 'images/sRSAimage1.jpg' %}" alt="">
           </div>
         </div>
 
@@ -190,15 +200,16 @@
           <div class="col-lg-5 mr-auto order-lg-2">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
-            <h2 class="section-heading">Ralstonia solanacearum</h2>
+            <h2 class="section-heading"><i>Ralstonia solanacearum</i></h2>
             <p class="lead">
-             < Descripcion >
+              Bacterial wilt (marchitez bacteriana MB) caused by <i>R. solanacearum</i> produces large losses worldwide due to the variability of the pathogen, wide range of hosts and large geographical distribution.
+
               <br>
-             < Link>
+              <a href="rabout.html">See more</a>
       </p>
           </div>
           <div class="col-lg-5 ml-auto order-lg-1">
-            <img class="img-fluid" src="{% static 'bootag/img/phyto.png' %}" alt="">
+            <img class="img-fluid" src="{% static 'images/marchitez.jpg' %}" alt="">
           </div>
         </div>
 
@@ -214,7 +225,7 @@
 
         <div class="row">
           <div class="col-lg-6 my-auto">
-            <h2>Proyecto</h2>
+            <h2>Project</h2>
           </div>
           <div class="col-lg-8 my-auto">
             <ul class="list-inline banner-social-buttons">
@@ -233,7 +244,7 @@
               <li class="list-inline-item">
               <a href="dtablev.html"  class="btn btn-secondary btn-lg">
                 <i class="fa fa-leaf fa-fw"></i>
-                <span class="network-name"><i>Viroma</i></span>
+                <span class="network-name"><i>Virome</i></span>
               </a>
             </li>
             </ul>
@@ -250,7 +261,7 @@
     <footer>
       <div class="container">
 
-        <p class="copyright text-muted small">Copyright &copy; PNIA 2017. All Rights Reserved</p>
+        <p class="copyright text-muted small">Copyright &copy; CIP - PNIA 2018. All Rights Reserved</p>
       </div>
     </footer>
 

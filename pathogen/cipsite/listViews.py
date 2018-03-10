@@ -40,6 +40,9 @@ def pabout(request):
 def rabout(request):
     return render(request, "rabout.html")
 
+def vabout(request):
+    return render(request, "vabout.html")
+
 def downloadr(request):
     return render(request, "downloadr.html")
 
