@@ -48,20 +48,27 @@ def downloadr(request):
 
 @login_required(login_url='/login/')
 def upload(request):
-    if request.method == 'POST' and request.FILES['xlsxfile']:
-    	dbase = ""
+	context = {}
+	if request.method == 'POST' and request.FILES['xlsxfile']:
+		dbase = ""
+    	uoption = ""
+
     	if 'optradio' in request.POST:
-			dbase = request.POST['optradio']
-   			
-        myfile = request.FILES['xlsxfile']
-        fs = FileSystemStorage(location='./files') 
-        filename = fs.save(myfile.name, myfile)
-        uploaded_file_url = fs.url(filename)
-        result = scripts.upload_sql_xlsx('./files/' + filename,dbase)
-        return render(request, 'upload.html', {
+    		dbase = request.POST['optradio']
+
+    	if 'optr' in request.POST:
+    		uoption = request.POST['optr']
+
+		myfile = request.FILES['xlsxfile']
+		fs = FileSystemStorage(location='./files')
+		filename = fs.save(myfile.name, myfile)
+		uploaded_file_url = fs.url(filename)
+		result = scripts.upload_sql_xlsx('./files/' + filename,dbase,uoption)
+		context['msg'] = result
+		return render(request, 'upload.html', {
             'uploaded_file_url': uploaded_file_url
-        }, result)
-    return render(request, 'upload.html')
+        , 'result' : result})
+	return render(request, 'upload.html', context)
 
 def dtabler(request):
 	data = loadData.load_data_samplefield()

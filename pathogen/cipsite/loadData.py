@@ -72,16 +72,6 @@ def pload_data_samplefield():
 		cursor.execute("SELECT * from phytoptora")
 		adh = cursor.fetchall()
 
-	# db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
-	# # prepare a cursor object using cursor() method
-	# cursor = db.cursor()
-
-	# # execute SQL query using execute() method.
-	# cursor.execute("SELECT * from phytoptora")
-
-	# # Fetch a single row using fetchone() method.
-	# adh = cursor.fetchall()
-
 	# # disconnect from server
 	# db.close()
 
@@ -130,6 +120,7 @@ def pload_data_samplefield():
 		
 		# attribute for field
 		# department =  to_unicode_or_bust(m[7])
+		country = m[4]
 		department = m[8]
 		province = m[9]
 		district = m[10]
@@ -156,7 +147,7 @@ def pload_data_samplefield():
 
 		if fid not in data_obj.keys():
 			data_obj[fid] = {}
-			data_obj[fid]['attr'] = [isolateID,department, province, district, locality, latitude, longitude, altitude]
+			data_obj[fid]['attr'] = [isolateID,department, province, district, locality, latitude, longitude, altitude, country]
 			data_obj[fid]['samp'] = []
 			data_obj[fid]['sampl'] = []
 			data_obj[fid]['test'] = []
@@ -182,16 +173,6 @@ def load_data_samplefield():
 	with connection.cursor() as cursor:
 		cursor.execute("SELECT * from ralstonia")
 		adh = cursor.fetchall()
-
-	# db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
-	# # prepare a cursor object using cursor() method
-	# cursor = db.cursor()
-
-	# # execute SQL query using execute() method.
-	# cursor.execute("SELECT * from ralstonia")
-
-	# # Fetch a single row using fetchone() method.
-	# adh = cursor.fetchall()
 
 	# # disconnect from server
 	# db.close()
@@ -222,6 +203,7 @@ def load_data_samplefield():
 			sequenced = 1
 
 		# attribute for field
+		country = m[4]
 		department = m[8]
 		province = m[9]
 		district = m[10]
@@ -248,7 +230,7 @@ def load_data_samplefield():
 
 		if fid not in data_obj.keys():
 			data_obj[fid] = {}
-			data_obj[fid]['attr'] = [department,province, district, locality, latitude, longitude, altitude]
+			data_obj[fid]['attr'] = [department,province, district, locality, latitude, longitude, altitude, country]
 			data_obj[fid]['samp'] = []
 			data_obj[fid]['test'] = []
 			data_obj[fid]['test'].append([sampleID, fid, biovar, phylotype, sequevar, ncbi_acc, sdate, shost, sequenced])
@@ -269,16 +251,6 @@ def vload_data_samplefield():
 	with connection.cursor() as cursor:
 		cursor.execute("SELECT * from virome")
 		adh = cursor.fetchall()
-
-	# db = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia", charset='utf8mb4')
-	# # prepare a cursor object using cursor() method
-	# cursor = db.cursor()
-
-	# # execute SQL query using execute() method.
-	# cursor.execute("SELECT * from virome")
-
-	# # Fetch a single row using fetchone() method.
-	# adh = cursor.fetchall()
 
 	# # disconnect from server
 	# db.close()
@@ -321,6 +293,7 @@ def vload_data_samplefield():
 		
 		# attribute for field
 		# department =  to_unicode_or_bust(m[7])
+		country = m[4]
 		department = m[8]
 		province = m[9]
 		district = m[10]
@@ -350,7 +323,7 @@ def vload_data_samplefield():
 
 		if fid not in data_obj.keys():
 			data_obj[fid] = {}
-			data_obj[fid]['attr'] = [isolateID,department, province, district, locality, latitude, longitude, altitude]
+			data_obj[fid]['attr'] = [isolateID,department, province, district, locality, latitude, longitude, altitude, country]
 			data_obj[fid]['samp'] = []
 			data_obj[fid]['sampl'] = []
 			data_obj[fid]['test'] = []

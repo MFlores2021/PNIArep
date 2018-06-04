@@ -8,6 +8,13 @@ function validateForm() {
         alert("Choose a database");
         return false;
     }
+
+    var w = document.forms["form1"]["optr"].value;
+    if (w == "") {
+        alert("Choose an option");
+        return false;
+    }
+
     var x = document.forms["form1"]["xlsxfile"].value;
     if (x == "") {
         alert("Choose a excel file to upload");
@@ -20,24 +27,30 @@ function validateForm() {
 {% block mainbody %}
 <div class="row">
 	<div class="col-md-8 col-md-offset-2" >
+	<h4 class="page-header"><b>Upload data</b></h4>
 		<form name="form1" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
 		    {% csrf_token %}
-		    <br><br>Select a excel file (xls,xlsx) to upload to the database.
+		    <br><br>Select a database.
 		    <br>
 			<label class="radio-inline"><input type="radio" name="optradio" value="phytoptora">P. Infestans</label>
 			<label class="radio-inline"><input type="radio" name="optradio" value="ralstonia">R. Solanacerum</label>
 			<label class="radio-inline"><input type="radio" name="optradio" value="virome">Virome</label>
 			<br><br>
+			<br><br>Select an option.
+		    <br>
+			<label class="radio-inline"><input type="radio" name="optr" value="upload">Upload new data</label>
+			<label class="radio-inline"><input type="radio" name="optr" value="update">Update data</label>
+			<label class="radio-inline"><input type="radio" name="optr" value="delete">Delete data</label>
+			<br><br>
+			<br><br>Select a excel file (xls,xlsx) to upload.
 		    <input type="file" name="xlsxfile">
 		    <br><br>
 		    <button type="submit">Upload</button>
 		</form>
 
 		  {% if uploaded_file_url %}
-		    <p style="color:red;"">File uploaded <!-- <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a> {{ result }} --></p>
+		    <p style="color:red;"">{{ result }}<!-- <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a> {{ result }} --></p>
 		  {% endif %}
-
-  		<!-- <p><a href="#">Return to home</a></p> -->
 
 	</div>
 </div>

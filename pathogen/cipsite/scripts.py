@@ -1,13 +1,18 @@
 import xlrd
 import MySQLdb
 import os
+from django.db import connection
+from django.db import IntegrityError
 
-def upload_sql_xlsx(xlsx_file,dbase):
+def upload_sql_xlsx(xlsx_file,dbase,uoption):
 
 	if xlsx_file == '':
 		return redirect("upload.html")
 
 	if dbase == '':
+		return redirect("upload.html")
+
+	if uoption == '':
 		return redirect("upload.html")
 
 	f = os.path.exists(xlsx_file)
@@ -17,17 +22,25 @@ def upload_sql_xlsx(xlsx_file,dbase):
 		book = xlrd.open_workbook(xlsx_file)
 		sheet = book.sheet_by_index(1)
 
-		# Establish a MySQL connection
-		database = MySQLdb.connect(host="db",   user="root", passwd="<d4+484s3>",  db="dbpnia")
-
-		# Get the cursor, which is used to traverse the database, line by line
-		cursor = database.cursor()
 
 		# Create the INSERT INTO sql query
-		query = "INSERT INTO " + dbase + " (id, per_code , isolate_code , fta_alive , temporary_code , CIPnumber , datecollection , host , department, province , district , locality , field , latitude , longitude , altitude, matingtype , haplotypes , metalaxyl , race , genotypic_method , clonal_lineage , date_intro , rack , box , grid , vials , biovar , phylotype , sequevar , ncbi_accession , cultivo_age , phenological_state , field_size , pict_field , pict_plant , pict_leaves , intercultivar , cultivar , seed_origin , man_system , pesticides , virus_detected , new_virus , novel_virus , symptoms) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+		if uoption == "upload":
+			query = "INSERT INTO " + dbase + " (id, per_code , isolate_code , fta_alive , temporary_code , CIPnumber , datecollection , host , department, province , district , locality , field , latitude , longitude , altitude, matingtype , haplotypes , metalaxyl , race , genotypic_method , clonal_lineage , date_intro , rack , box , grid , vials , biovar , phylotype , sequevar , ncbi_accession , cultivo_age , phenological_state , field_size , pict_field , pict_plant , pict_leaves , intercultivar , cultivar , seed_origin , man_system , pesticides , virus_detected , new_virus , novel_virus , symptoms) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-		# Create a For loop to iterate through each row in the XLS file, starting at row 2 to skip the headers
-		for r in range(1, sheet.nrows):
+		elif uoption == "update":
+   			query = "UPDATE " + dbase + " SET per_code=%s , isolate_code=%s , fta_alive=%s , temporary_code=%s , datecollection=%s, host=%s , department=%s, province=%s , district=%s , locality=%s , field=%s , latitude=%s , longitude=%s, altitude=%s, matingtype=%s , haplotypes=%s , metalaxyl=%s, race=%s , genotypic_method=%s , clonal_lineage=%s , date_intro=%s , rack=%s , box=%s , grid=%s , vials=%s , biovar=%s , phylotype=%s , sequevar=%s , ncbi_accession=%s , cultivo_age=%s , phenological_state=%s , field_size=%s , pict_field=%s , pict_plant=%s , pict_leaves=%s , intercultivar=%s , cultivar=%s , seed_origin=%s , man_system=%s , pesticides=%s , virus_detected=%s , new_virus=%s , novel_virus=%s , symptoms=%s  WHERE CIPnumber=%s"
+
+   		elif uoption == "delete":
+   			query = "DELETE FROM " + dbase + " WHERE CIPnumber = %s"
+
+   		else:
+   			print("error")
+
+
+		with connection.cursor() as cursor:
+
+			# Create a For loop to iterate through each row in the XLS file, starting at row 2 to skip the headers
+			for r in range(1, sheet.nrows):
 
 				id = sheet.cell(r,0).value
 				per_code  = sheet.cell(r,1).value
@@ -75,28 +88,43 @@ def upload_sql_xlsx(xlsx_file,dbase):
 				new_virus  = sheet.cell(r,43).value
 				novel_virus  = sheet.cell(r,44).value
 				symptoms = sheet.cell(r,45).value
-				# Assign values from each row
-				values = (id, per_code , isolate_code , fta_alive , temporary_code , CIPnumber , datecollection, host , department, province , district , locality , field , latitude , longitude, altitude, matingtype , haplotypes , metalaxyl , race , genotypic_method , clonal_lineage , date_intro , rack , box , grid , vials , biovar , phylotype , sequevar , ncbi_accession , cultivo_age , phenological_state , field_size , pict_field , pict_plant , pict_leaves , intercultivar , cultivar , seed_origin , man_system , pesticides , virus_detected , new_virus , novel_virus , symptoms)
 
-				# Execute sql Query
-				cursor.execute(query, values)
+				try:
 
-		# Close the cursor
-		cursor.close()
+					if uoption == "upload":
+						# Assign values from each row
+						values = (id, per_code , isolate_code , fta_alive , temporary_code , CIPnumber , datecollection, host , department, province , district , locality , field , latitude , longitude, altitude, matingtype , haplotypes , metalaxyl , race , genotypic_method , clonal_lineage , date_intro , rack , box , grid , vials , biovar , phylotype , sequevar , ncbi_accession , cultivo_age , phenological_state , field_size , pict_field , pict_plant , pict_leaves , intercultivar , cultivar , seed_origin , man_system , pesticides , virus_detected , new_virus , novel_virus , symptoms)
+						# Execute sql Query
+						cursor.execute(query, values)
+					
+					elif uoption == "update":
 
-		# Commit the transaction
-		database.commit()
+						values = (per_code , isolate_code , fta_alive , temporary_code , datecollection, host , department, province , district , locality , field , latitude , longitude, altitude, matingtype , haplotypes , metalaxyl , race , genotypic_method , clonal_lineage , date_intro , rack , box , grid , vials , biovar , phylotype , sequevar , ncbi_accession , cultivo_age , phenological_state , field_size , pict_field , pict_plant , pict_leaves , intercultivar , cultivar , seed_origin , man_system , pesticides , virus_detected , new_virus , novel_virus , symptoms, CIPnumber)
+						# Execute sql Query
+						cursor.execute(query, values)
 
-		# Close the database connection
-		database.close()
+					elif uoption == "delete":
+						# Execute sql Query
+						cursor.execute(query, (CIPnumber,))
 
-		columns = str(sheet.ncols)
-		rows = str(sheet.nrows)
-		result = "I just imported " + columns + " columns and " + rows + " rows to the database!"
+					else:
+						print("Error")
+
+					result = "Operation successfully completed !"
+
+				except (IntegrityError) as error:
+					result = error.__cause__
+
+				# Close the cursor
+			cursor.close()
+
+		# 		columns = str(sheet.ncols)
+		# 		rows = str(sheet.nrows)
+		# 		result = rows + " rows were imported to the database!"	
 
 	else:
-		result = "Soomething went wrong check your xlsx file ------------->"
-		print result
+		result = "Soomething went wrong check your XLSX file "
+
 
 	return result
 
