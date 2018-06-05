@@ -37,6 +37,7 @@ def flist(request):
 			context['fid'] = fid
 			context['prefix'] = fid[:3]
 			context['departament'] = data[fid]['attr'][0]
+			context['country'] = data[fid]['attr'][7]
 			context['province'] = data[fid]['attr'][1]
 			context['district'] = data[fid]['attr'][2]
 			context['locality'] = data[fid]['attr'][3]
@@ -142,6 +143,7 @@ def flistp(request):
 			context['fid'] = fid
 			context['prefix'] = fid[:3]
 			context['isolateid'] = data[fid]['attr'][0]
+			context['country'] = data[fid]['attr'][8]
 			context['region'] = data[fid]['attr'][1]
 			context['province'] = data[fid]['attr'][2]
 			context['district'] = data[fid]['attr'][3]
@@ -178,6 +180,7 @@ def flistv(request):
 			context['fid'] = fid
 			context['prefix'] = fid[:3]
 			# context['isolateid'] = data[fid]['attr'][0]
+			context['country'] = data[fid]['attr'][8]
 			context['region'] = data[fid]['attr'][1]
 			context['province'] = data[fid]['attr'][2]
 			context['district'] = data[fid]['attr'][3]

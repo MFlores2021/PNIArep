@@ -79,6 +79,7 @@ def dtabler(request):
 		if fid in data:
 			context['fid'] = fid
 			context['prefix'] = fid[0] + fid[1]
+			context['country'] = data[fid]['attr'][7]
 			context['region'] = data[fid]['attr'][0]
 			context['district'] = data[fid]['attr'][1]
 			context['locality'] = data[fid]['attr'][2]

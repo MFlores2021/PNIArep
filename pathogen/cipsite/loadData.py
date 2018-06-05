@@ -120,7 +120,7 @@ def pload_data_samplefield():
 		
 		# attribute for field
 		# department =  to_unicode_or_bust(m[7])
-		country = m[4]
+		country = m[0]
 		department = m[8]
 		province = m[9]
 		district = m[10]
@@ -203,7 +203,7 @@ def load_data_samplefield():
 			sequenced = 1
 
 		# attribute for field
-		country = m[4]
+		country = m[0]
 		department = m[8]
 		province = m[9]
 		district = m[10]
@@ -293,7 +293,7 @@ def vload_data_samplefield():
 		
 		# attribute for field
 		# department =  to_unicode_or_bust(m[7])
-		country = m[4]
+		country = m[0]
 		department = m[8]
 		province = m[9]
 		district = m[10]
@@ -487,6 +487,7 @@ def hpload_data_samplefield():
 			sequenced = 1
 		
 		# attribute for field
+		country = m[0]
 		department = m[8]
 		province = m[9]
 		district = m[10]
@@ -520,7 +521,7 @@ def hpload_data_samplefield():
 
 		if fid not in data_obj.keys():
 			data_obj[fid] = {}
-			data_obj[fid]['attr'] = [isolateID,department, province, district, locality, latitude, longitude, altitude]
+			data_obj[fid]['attr'] = [isolateID,department, province, district, locality, latitude, longitude, altitude, country]
 			data_obj[fid]['samp'] = []
 			data_obj[fid]['sampl'] = []
 			data_obj[fid]['test'] = []

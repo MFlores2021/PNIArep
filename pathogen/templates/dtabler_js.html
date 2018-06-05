@@ -45,7 +45,7 @@ function filter_data() {
 function test_selection(virusList, selectName, selectCID) {
 	var table_array = [];
 	var virus_uniq = {};
-	for (var vid in geoList) { console.log(geoList[vid]['test']);
+	for (var vid in geoList) { 
 		for (var i = 0; i< geoList[vid]['test'].length; i++) {
 			var sid = geoList[vid]['test'][i][0];
 			var fid = geoList[vid]['test'][i][1];
@@ -89,7 +89,7 @@ function field_selection(geoList, cid) {
 
 			if (cid == id || cid == 'ALL') {
 				var table_html = '';
-				var cname = 'Peru';
+				var cname = geoList[name]['attr'][7];
 				var lat = parseFloat(geoList[name]['attr'][4]);
 				var lng = parseFloat(geoList[name]['attr'][5]);
 				table_html += "<tr><td>" + cname + "</td>\n";
@@ -126,7 +126,7 @@ function sample_selection(geoList, cid) {
 	for(var i = 0; i < sampleList.length; i++) {
 		var fid = sampleList[i][1];
 		var id = fid.substr(0,2);
-		var cname = 'Peru'; //country[id];
+		// var cname = sampleList[i][7] ; //country[id];
 		var ffid = fid.substr(0,3);
 
 		// save the sample info to html table
