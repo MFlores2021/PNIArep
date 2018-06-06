@@ -184,4 +184,7 @@ def dmapp(request):
 	context = {}
 	context.update(settings.GLOBAL_SETTINGS)
 	return render(request, 'dmapp.html', context)
+
+def help(request):
+    return render(request, "help.html")
 	

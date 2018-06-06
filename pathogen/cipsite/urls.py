@@ -60,6 +60,7 @@ urlpatterns = [
     url(r'^vflist', pageDisplay.flistv),
     url(r'^sctg',  pageDisplay.sctg),
     url(r'^upload', listViews.upload),
+    url(r'^help', listViews.help),
 ]
 
 handler404 = 'listViews.error_404'

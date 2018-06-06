@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block javascript %}
 <script>
@@ -28,6 +29,7 @@ function validateForm() {
 <div class="row">
 	<div class="col-md-8 col-md-offset-2" >
 	<h4 class="page-header"><b>Upload data</b></h4>
+	<p>Download the <a href="{% static 'papers/PNIA_template2018.xlsx' %}">excel template</a> and check an <a href="{% static 'papers/PNIA_example.xlsx' %}">example</a>. (Please check common <a href="{% static 'papers/error_list.txt' %}">error list</a> before upload) </p> 
 		<form name="form1" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
 		    {% csrf_token %}
 		    <br><br>Select a database.
