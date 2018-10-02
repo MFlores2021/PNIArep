@@ -16,12 +16,12 @@
 
 {% block mainbody %}
 <div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-12 col-md-12 col-sm-12">
         <h1 class="page-header"><i>Phytophthora Infestans</i> data</h1>
     </div>
 </div>
 <div class="row">
-	<div class="col-lg-12" >
+	<div class="col-lg-12 col-md-12 col-sm-12" >
 		<div class="tabbable" id="tabs-888938">
 			<ul class="nav nav-tabs">
 				<li class="active">
@@ -109,10 +109,9 @@
     		responsive: true
 		} );
 		$('#virusTable').DataTable({
-    		scrollX: true
-		} );
-		$('#sampleTable').DataTable({
-    		scrollX: true
+
+    		responsive: true
+    		// scrollX: true
 		} );
 	} );
     </script>
