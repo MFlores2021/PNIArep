@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block mainbody %}
+
+<br>
+<h3 align="center">Resultados del Viroma</h3>
+<br>
+<h4>Resumen del Proyecto</h4><br>
+<li><a href="{% static 'papers/FLYER RESUMEN PROYECTO VIROMA PAPA A42.pdf' %}" target=_blank>
+		Resumen</i>
+	</a></li>
+	<br />
+	<h4>Protocolo de sRSA</h4><br>
+	<li><a href="{% static 'papers/sRSA Protocols (2019).pdf' %}" target=_blank>
+			sRSA Protocols</i>
+		</a></li>
+		<br />
+		<br />
+		<h4>Presentación Pública de Resultados</h4><br>
+<li><a href="{% static 'papers/1_Viroma en Papayo.pdf' %}" target=_blank>
+		Viroma en Papayo</a></li><br>
+<li><a href="{% static 'papers/2_Resultados_Viroma de la Papa_Marzo 2019_(SFD).pdf' %}" target=_blank>
+		Resultados viroma de la Papa</a></li><br>
+<li><a href="{% static 'papers/3_Pamela (Tesis)-Marzo2019.pdf' %}" target=_blank>
+		Detección de secuencias virales en <i>Solanum lycopersicum</i> y <i>Capsicum spp.</i></a></li><br>
+<li><a href="{% static 'papers/4_Melody (Tesis)-Marzo2019.pdf' %}" target=_blank>
+		Identificación y obtención del genoma completo de virus nuevos de papa</a></li><br>
+<li><a href="{% static 'papers/5_VirusDetect en windows.pdf' %}" target=_blank>
+		Base de datos y Virus Detect para windows</a></li><br>
+<br>
+{% endblock %}
+

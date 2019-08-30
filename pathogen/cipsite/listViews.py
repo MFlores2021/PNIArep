@@ -187,4 +187,9 @@ def dmapp(request):
 
 def help(request):
     return render(request, "help.html")
-	
+
+def vresults(request):
+        return render(request, "vresults.html")
+
+def vd_download(request):
+        return render(request, "vd_download.html")

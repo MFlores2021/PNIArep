@@ -18,6 +18,11 @@ def download(request):
 	context.update(settings.GLOBAL_SETTINGS)
 	return render(request, 'download.html', context)
 
+def vd_download(request):
+        context = {}
+        context.update(settings.GLOBAL_SETTINGS)
+        return render(request,'vd_download.html',context)
+
 # dynamic pages
 def flist(request):
 	context = {}
